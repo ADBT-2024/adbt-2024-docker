@@ -1,0 +1,159 @@
+[
+  {
+    "_id": "history",
+    "colName": "history",
+    "created": "2021-07-24T07:40:51.336Z",
+    "sortNum": 0,
+    "folders": []
+  },
+  {
+    "_id": "6afcdfbe-f7b7-44e4-8c31-43f2d2c54322",
+    "colName": "KrakowEats",
+    "created": "2021-07-25T08:18:17.292Z",
+    "sortNum": 10000,
+    "folders": [
+      {
+        "_id": "ead86d58-f798-4984-b6f1-35dc35457200",
+        "name": "USERS",
+        "containerId": "",
+        "created": "2021-07-25T08:18:17.294Z",
+        "sortNum": 10000,
+        "settings": {}
+      },
+      {
+        "_id": "3f464ff7-39d0-43b3-a275-97099f0b3e23",
+        "name": "RESTAURANTS",
+        "containerId": "",
+        "created": "2021-07-25T08:18:17.294Z",
+        "sortNum": 20000,
+        "settings": {}
+      },
+      {
+        "_id": "dd7d7a12-4611-4c82-87ce-ee1e9b0f87d2",
+        "name": "PRODUCTS",
+        "containerId": "",
+        "created": "2021-07-25T08:18:17.294Z",
+        "sortNum": 25000,
+        "settings": {}
+      },
+      {
+        "_id": "5dab484e-b87f-4457-96c5-9077cb330454",
+        "name": "ORDER OWNERS' FR",
+        "containerId": "",
+        "created": "2021-07-25T08:18:17.294Z",
+        "sortNum": 30000,
+        "settings": {}
+      },
+      {
+        "_id": "193e838f-1f3a-4842-ab9c-2aa215a07cbc",
+        "name": "CATEGORIES",
+        "containerId": "",
+        "created": "2021-07-25T10:19:21.915Z",
+        "sortNum": 15000,
+        "settings": {}
+      },
+      {
+        "_id": "3589e5d2-eeb1-45c8-a512-898908dc5630",
+        "name": "ORDER CUSTOMERS' FR",
+        "containerId": "",
+        "created": "2023-02-13T10:35:30.988Z",
+        "sortNum": 35000,
+        "settings": {}
+      },
+      {
+        "_id": "0271f861-7eaa-45b0-904d-07764581b6f1",
+        "name": "ADVANCED QUERIES",
+        "containerId": "",
+        "created": "2023-04-10T13:40:31.760Z",
+        "sortNum": 45000,
+        "settings": {
+          "tests": [
+            {
+              "type": "res-code",
+              "custom": "",
+              "action": "equal",
+              "value": "200"
+            }
+          ]
+        }
+      },
+      {
+        "_id": "9c5b9f60-5743-4512-a599-c923e2e3084a",
+        "name": "PRODUCT REVIEWS",
+        "containerId": "",
+        "created": "2023-04-10T13:40:41.484Z",
+        "sortNum": 40000,
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "headers": [],
+      "tests": []
+    }
+  },
+  {
+    "_id": "21a9caed-6686-4610-9adf-d4da4ae2c26c",
+    "colName": "KrakowEatsTestsForBigSeeder",
+    "created": "2023-03-28T06:10:17.165Z",
+    "sortNum": 20000,
+    "folders": [
+      {
+        "_id": "1097674c-2c8b-4547-984f-f6ef2671b1b7",
+        "name": "USERS",
+        "containerId": "",
+        "created": "2023-03-28T06:10:17.168Z",
+        "sortNum": 10000,
+        "settings": {}
+      },
+      {
+        "_id": "d5108590-bfaf-400b-b25e-f175074d6741",
+        "name": "CATEGORIES",
+        "containerId": "",
+        "created": "2023-03-28T06:10:17.169Z",
+        "sortNum": 15000,
+        "settings": {}
+      },
+      {
+        "_id": "73daccb0-c310-4307-b05d-3754d86da74c",
+        "name": "RESTAURANTS",
+        "containerId": "",
+        "created": "2023-03-28T06:10:17.170Z",
+        "sortNum": 20000,
+        "settings": {}
+      },
+      {
+        "_id": "91a5461e-9c22-4a39-a3b7-6dc25b97a26b",
+        "name": "PRODUCTS",
+        "containerId": "",
+        "created": "2023-03-28T06:10:17.171Z",
+        "sortNum": 25000,
+        "settings": {}
+      },
+      {
+        "_id": "62de07df-d013-4c64-b7d2-a09aac9f3db2",
+        "name": "ORDER OWNERS' FR",
+        "containerId": "",
+        "created": "2023-03-28T06:10:17.172Z",
+        "sortNum": 30000,
+        "settings": {}
+      },
+      {
+        "_id": "7603e94b-ca54-4b5b-a9be-bd611997effb",
+        "name": "ORDER CUSTOMERS' FR",
+        "containerId": "",
+        "created": "2023-03-28T06:10:17.174Z",
+        "sortNum": 35000,
+        "settings": {}
+      }
+    ],
+    "settings": {
+      "headers": [],
+      "tests": [],
+      "runOptions": {
+        "delay": 0,
+        "iterations": 20,
+        "dataFilePath": ""
+      }
+    }
+  }
+]
