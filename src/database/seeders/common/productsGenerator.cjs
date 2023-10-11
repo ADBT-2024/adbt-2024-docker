@@ -32,7 +32,7 @@ const generateFakeProductMongoose = async (restaurantId, restaurantCategoryName,
 
 const generateFakeProductSequelize = async (restaurantId, restaurantCategoryName, queryInterface) => {
   const { name, description, image, order, availability, createdAt, updatedAt } = generateCommonFakeProductProperties()
-  const productCategories = await queryInterface.sequelize.query('SELECT id,name FROM productcategories ORDER BY RAND() LIMIT 1', { type: QueryTypes.SELECT })
+  const productCategories = await queryInterface.sequelize.query('SELECT id,name FROM ProductCategories ORDER BY RAND() LIMIT 1', { type: QueryTypes.SELECT })
   const productCategoryId = productCategories[0].id
   const productCategoryName = productCategories[0].name
 

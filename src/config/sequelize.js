@@ -10,7 +10,10 @@ const initSequelize = function () {
   const sequelizeConnection = new Sequelize(databaseName, databaseUsername, databasePassword, {
     host: databaseHost,
     port: databasePort,
-    dialect: 'mariadb'
+    dialect: 'mariadb',
+    dialectOptions: {
+      allowPublicKeyRetrieval: true
+    }
     // logging: false
   })
   return sequelizeConnection.authenticate()

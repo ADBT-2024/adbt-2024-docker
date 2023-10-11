@@ -11,8 +11,10 @@ const getMongoDBConnectionURI = () => {
   const databasePassword = process.env.DATABASE_PASSWORD
   const databaseName = process.env.DATABASE_NAME
   const dbCredentials = (databaseUsername && databasePassword) ? databaseUsername + ':' + databasePassword + '@' : ''
+  const authSource = databaseProtocol === 'mongodb+srv' ? '' : `?authSource=${databaseName}`
 
-  const mongoDbConnectionURI = `${databaseProtocol}://${dbCredentials}${databaseHost}${databasePort}/${databaseName}?authSource=admin`
+  const mongoDbConnectionURI = `${databaseProtocol}://${dbCredentials}${databaseHost}${databasePort}/${databaseName}${authSource}`
+
   return mongoDbConnectionURI
 }
 

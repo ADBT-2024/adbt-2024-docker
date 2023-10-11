@@ -13,7 +13,7 @@ module.exports = {
      * }], {})
     */
 
-    const restaurants = await queryInterface.sequelize.query('SELECT restaurants.id, restaurantcategories.name as restaurantCategoryName FROM restaurants LEFT JOIN restaurantcategories ON(restaurants.restaurantCategoryId = restaurantcategories.id)', { type: QueryTypes.SELECT })
+    const restaurants = await queryInterface.sequelize.query('SELECT Restaurants.id, RestaurantCategories.name as restaurantCategoryName FROM Restaurants LEFT JOIN RestaurantCategories ON(Restaurants.restaurantCategoryId = RestaurantCategories.id)', { type: QueryTypes.SELECT })
     let products = []
     await Promise.all(restaurants.map(async (restaurant) => {
       const restaurantProducts = await generateProducts(restaurant.id, generateRandomNumberOfProducts(), restaurant.restaurantCategoryName, 'sequelize', queryInterface)

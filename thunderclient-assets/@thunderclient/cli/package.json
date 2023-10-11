@@ -1,0 +1,31 @@
+{
+  "name": "@thunderclient/cli",
+  "version": "1.2.3",
+  "description": "Thunder Client CLI",
+  "author": "Ranga Vadhineni",
+  "homepage": "https://www.thunderclient.com",
+  "license": "SEE LICENSE.txt",
+  "keywords": [
+    "Thunder Client",
+    "CLI"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.js",
+  "bin": {
+    "tc": "dist/index.js",
+    "tc2": "dist/index.js"
+  },
+  "repository": {
+    "url": "https://github.com/rangav/thunder-client-support"
+  },
+  "devDependencies": {
+    "@types/yargs": "^17.0.19",
+    "copy-webpack-plugin": "^11.0.0",
+    "patch-package": "^6.5.1",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.4",
+    "vm2": "3.9.16",
+    "webpack": "^5.76.1",
+    "webpack-cli": "^5.0.1"
+  }
+}

@@ -8,6 +8,9 @@ module.exports = {
     port: process.env.DATABASE_PORT,
     appPort: process.env.APP_PORT,
     dialect: 'mariadb',
+    dialectOptions: {
+      allowPublicKeyRetrieval: true
+    },
     logging: false
   },
   test: {
@@ -17,6 +20,9 @@ module.exports = {
     host: process.env.DATABASE_HOST,
     port: process.env.DATABASE_PORT,
     dialect: 'mariadb',
+    dialectOptions: {
+      allowPublicKeyRetrieval: true
+    },
     logging: false
   },
   production: {
@@ -26,6 +32,9 @@ module.exports = {
     host: process.env.DATABASE_HOST,
     port: process.env.DATABASE_PORT,
     dialect: 'mariadb',
+    dialectOptions: {
+      allowPublicKeyRetrieval: true
+    },
     logging: false,
     pool: {
       max: 5,

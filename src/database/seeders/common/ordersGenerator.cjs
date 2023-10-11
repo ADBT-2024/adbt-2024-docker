@@ -5,8 +5,9 @@ const generateOrders = async (nOrders, technology = 'mongoose', queryInterface =
   const orders = []
   const address = `${faker.address.streetAddress()}, ${faker.address.cityName()}, ${faker.address.country()}.`
   let availableOrderId
+  const productsByRestaurant = {}
   if (technology === 'sequelize') {
-    availableOrderId = await queryInterface.sequelize.query('SELECT COALESCE(MAX(id), 0) + 1 AS availableId FROM orders', { type: QueryTypes.SELECT })
+    availableOrderId = await queryInterface.sequelize.query('SELECT COALESCE(MAX(id), 0) + 1 AS availableId FROM Orders', { type: QueryTypes.SELECT })
     availableOrderId = availableOrderId[0].availableId
   }
   let restaurants, users
@@ -15,6 +16,14 @@ const generateOrders = async (nOrders, technology = 'mongoose', queryInterface =
       mongoose.connection.db.collection('restaurants').find({}).project({ _id: 1, products: 1, shippingCosts: 1 }).toArray(),
       mongoose.connection.db.collection('users').find({ userType: 'customer' }).project({ _id: 1 }).toArray()
     ])
+  } else if (technology === 'sequelize') {
+    restaurants = await queryInterface.sequelize.query('SELECT id,shippingCosts FROM Restaurants ORDER BY RAND()', { type: QueryTypes.SELECT })
+    users = await queryInterface.sequelize.query('SELECT id FROM Users ORDER BY RAND()', { type: QueryTypes.SELECT })
+    const productDTOs = await queryInterface.sequelize.query('SELECT id, price, restaurantId FROM Products', { type: QueryTypes.SELECT })
+    productDTOs.forEach((productDTO) => {
+      if (!(productDTO.restaurantId in productsByRestaurant)) { productsByRestaurant[productDTO.restaurantId] = [] }
+      productsByRestaurant[productDTO.restaurantId].push(productDTO)
+    })
   }
 
   for (let i = 0; i < nOrders; i++) {
@@ -23,7 +32,9 @@ const generateOrders = async (nOrders, technology = 'mongoose', queryInterface =
       const randomUserId = users[Math.floor(Math.random() * users.length)]._id
       orders.push((await generateFakeOrderMongoose(address, randomRestaurant, randomUserId)))
     } else if (technology === 'sequelize') {
-      orders.push((await generateFakeOrderSequelize(address, queryInterface, availableOrderId)))
+      const randomRestaurant = restaurants[Math.floor(Math.random() * restaurants.length)]
+      // Selecciono restaurante aleatorio, obtengo los productos, y se lo paso a generateFakeORderSequelize
+      orders.push((await generateFakeOrderSequelize(address, availableOrderId, randomRestaurant, users[Math.floor(Math.random() * users.length)].id, productsByRestaurant[randomRestaurant.id])))
       availableOrderId++
     }
   }
@@ -36,16 +47,9 @@ const generateFakeOrderMongoose = async (address, restaurant, userId) => {
   return { createdAt, updatedAt, startedAt, sentAt, deliveredAt, price, address, shippingCosts, restaurantId: restaurant._id, userId, products }
 }
 
-const generateFakeOrderSequelize = async (address, queryInterface, availableOrderId) => {
-  const restaurants = await queryInterface.sequelize.query('SELECT id,shippingCosts FROM restaurants ORDER BY RAND() LIMIT 1', { type: QueryTypes.SELECT })
-  const users = await queryInterface.sequelize.query('SELECT id FROM users ORDER BY RAND() LIMIT 1', { type: QueryTypes.SELECT })
-  const restaurantId = restaurants[0].id
-  const restaurantProducts = await queryInterface.sequelize.query('SELECT * FROM products WHERE restaurantId = :restaurantId', { replacements: { restaurantId }, type: QueryTypes.SELECT })
-
-  const userId = users[0].id
-
-  const { createdAt, updatedAt, startedAt, sentAt, deliveredAt, price, shippingCosts, products } = await generateCommonFakeOrderProperties(restaurantProducts, restaurants[0].shippingCosts, availableOrderId)
-
+const generateFakeOrderSequelize = async (address, availableOrderId, restaurant, userId, restaurantProducts) => {
+  const restaurantId = restaurant.id
+  const { createdAt, updatedAt, startedAt, sentAt, deliveredAt, price, shippingCosts, products } = await generateCommonFakeOrderProperties(restaurantProducts, restaurant.shippingCosts, availableOrderId)
   return { id: availableOrderId, createdAt, updatedAt, startedAt, sentAt, deliveredAt, price, address, shippingCosts, restaurantId, userId, products }
 }
 
@@ -73,8 +77,8 @@ const shuffleArray = (arr) => {
   return shuffledArr
 }
 async function generateCommonFakeOrderProperties (restaurantProducts, restaurantShippingCosts, availableOrderId) {
-  const products = await pickOrderProductsFromProducts(restaurantProducts, availableOrderId)
-  let price = computePrice(products)
+  const orderProducts = await pickOrderProductsFromProducts(restaurantProducts, availableOrderId)
+  let price = computePrice(orderProducts)
   const shippingCosts = price > 10 ? 0 : restaurantShippingCosts
   price += shippingCosts
   const status = faker.helpers.arrayElement(['pending', 'in process', 'sent', 'delivered'])
@@ -95,7 +99,7 @@ async function generateCommonFakeOrderProperties (restaurantProducts, restaurant
     deliveredAt = faker.date.soon(0, sentAt)
     updatedAt = deliveredAt
   }
-  return { createdAt, updatedAt, startedAt, sentAt, deliveredAt, price, shippingCosts, products }
+  return { createdAt, updatedAt, startedAt, sentAt, deliveredAt, price, shippingCosts, products: orderProducts }
 }
 
 function getRandomNumberOfProducts (max) {

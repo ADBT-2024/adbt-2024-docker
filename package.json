@@ -17,6 +17,7 @@
     "sequelize-cli": "^6.5.2"
   },
   "scripts": {
+    "install-thunderclient-extension": "code --install-extension ./thunderclient-assets/rangav.vscode-thunder-client-2.5.1.vsix",
     "start": "nodemon --watch src ./src/backend.js",
     "start:sequelize": "cp .env.sequelize .env && nodemon --watch src ./src/backend.js",
     "start:mongo-local": "cp .env.mongo.local .env && nodemon --watch src ./src/backend.js",
@@ -31,7 +32,7 @@
     "test:mongo-local": "echo '==========Testing mongo-local==========' && cp .env.mongo.local .env && npm install && NODE_ENV=production node ./src/backend.js & sleep 5 && echo 'Running tc collection' && tc --col KrakowEatsTestsForBigSeeder --report csv,html --stop-on-fail && echo 'Killing node server' && curl -X POST http://localhost:3000/shutdown && sleep 2",
     "test:mongo-atlas": "echo '==========Testing mongo-atlas==========' && cp .env.mongo.atlas .env && npm install && NODE_ENV=production node ./src/backend.js & sleep 5 && echo 'Running tc collection' && tc --col KrakowEatsTestsForBigSeeder --report csv,html --stop-on-fail && echo 'Killing node server' && curl -X POST http://localhost:3000/shutdown && sleep 2",
     "test:computePerformance": "./performanceMeasurements/computePerformance.sh",
-    "test:all:refresh": "rm -rf performanceMeasurements/logs/ performanceMeasurements/aggregatedPerformance.txt && npm run test:sequelize && npm run test:mongo-local && npm run test:mongo-atlas && npm run test:computePerformance",
+    "test:all:refresh": "rm -rf performanceMeasurements/logs/ performanceMeasurements/aggregatedPerformance.txt && npm run seed:sequelize:big && npm run test:sequelize && npm run seed:mongo-local:big && npm run test:mongo-local && npm run seed:mongo-atlas:big && npm run test:mongo-atlas && npm run test:computePerformance",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
   },
   "devDependencies": {
@@ -46,7 +47,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "nodemon": "^2.0.20",
-    "rbql": "^0.27.0"
+    "rbql": "^0.27.0",
+    "@thunderclient/cli": "file:./thunderclient-assets/@thunderclient/cli"
   },
   "type": "module"
 }

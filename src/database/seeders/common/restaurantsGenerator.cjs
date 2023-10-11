@@ -36,9 +36,9 @@ async function generateFakeRestaurantMongoose (restaurantCategory, userId) {
 
 const generateFakeRestaurantSequelize = async (queryInterface) => {
   const { name, description, address, postalCode, url, shippingCosts, email, phone, logo, heroImage, status, createdAt, updatedAt } = generateCommonFakeRestaurantProperties()
-  const users = await queryInterface.sequelize.query('SELECT id FROM users WHERE userType LIKE \'owner\' ORDER BY RAND() LIMIT 1', { type: QueryTypes.SELECT })
+  const users = await queryInterface.sequelize.query('SELECT id FROM Users WHERE userType LIKE \'owner\' ORDER BY RAND() LIMIT 1', { type: QueryTypes.SELECT })
   const userId = users[0].id
-  const restaurantCategories = await queryInterface.sequelize.query('SELECT id FROM restaurantcategories ORDER BY RAND() LIMIT 1', { type: QueryTypes.SELECT })
+  const restaurantCategories = await queryInterface.sequelize.query('SELECT id FROM RestaurantCategories ORDER BY RAND() LIMIT 1', { type: QueryTypes.SELECT })
   const restaurantCategoryId = restaurantCategories[0].id
 
   return { name, description, address, postalCode, url, shippingCosts, email, averageServiceMinutes: null, phone, logo, heroImage, status, createdAt, updatedAt, userId, restaurantCategoryId }
