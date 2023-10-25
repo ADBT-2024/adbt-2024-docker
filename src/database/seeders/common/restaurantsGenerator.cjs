@@ -31,7 +31,7 @@ async function generateFakeRestaurantMongoose (restaurantCategory, userId) {
 
   const products = await generateProducts(_id, generateRandomNumberOfProducts(), restaurantCategory.name)
 
-  return { _id, name, description, address, postalCode, url, shippingCosts, email, phone, logo, heroImage, status, restaurantCategoryId: restaurantCategory._id, userId, products, createdAt, updatedAt }
+  return { _id, name, description, address, postalCode, url, shippingCosts, email, phone, logo, heroImage, status, _restaurantCategoryId: restaurantCategory._id, _userId: userId, products, createdAt, updatedAt }
 }
 
 const generateFakeRestaurantSequelize = async (queryInterface) => {

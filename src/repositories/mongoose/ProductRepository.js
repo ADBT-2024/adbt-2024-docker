@@ -1,16 +1,12 @@
-import RestaurantMongoose from './models/Restaurant.js'
-import OrderMongoose from './models/Order.js'
-import ProductCategoryMongoose from './models/ProductCategory.js'
 import RepositoryBase from '../RepositoryBase.js'
+import RestaurantMongoose from './models/RestaurantMongoose.js'
+import OrderMongoose from './models/OrderMongoose.js'
 
 class ProductRepository extends RepositoryBase {
   async findById (id) {
     try {
-      const restaurant = await RestaurantMongoose.findOne({ 'products._id': id })
-      const product = restaurant.products.id(id)
-      product.productCategory = await ProductCategoryMongoose.findById(product.productCategoryId)
-      product.restaurantId = restaurant._id
-      return product.toBussinessEntity()
+      const restaurant = await RestaurantMongoose.findOne({ 'products._id': id }).populate('products.productCategory')
+      return restaurant.products.id(id)
     } catch (err) {
       return null
     }
@@ -20,8 +16,7 @@ class ProductRepository extends RepositoryBase {
     const restaurant = await RestaurantMongoose.findById(productData.restaurantId)
     restaurant.products.push(productData)
     await restaurant.save()
-    const savedProduct = restaurant.products.at(-1) // last element of the array
-    return savedProduct.toBussinessEntity()
+    return restaurant.products.at(-1) // last element of the array
   }
 
   async update (id, productData) {
@@ -38,8 +33,8 @@ class ProductRepository extends RepositoryBase {
           'products.$.productCategoryId': productData.productCategoryId
         }
       },
-      { new: true })
-    return restaurantUpdated.products.id(id).toBussinessEntity()
+      { new: true }).populate('products.productCategory')
+    return restaurantUpdated.products.id(id)
   }
 
   async destroy (id) {
@@ -77,13 +72,11 @@ class ProductRepository extends RepositoryBase {
       { $sort: { unitsSold: -1 } },
       { $limit: 3 }
     ])
-    const top3ProductsFull = await Promise.all(top3Products.map(async (product) => {
+    return Promise.all(top3Products.map(async (product) => {
       const fullProduct = await this.findById(product._id)
       fullProduct.unitsSold = product.unitsSold
       return fullProduct
     }))
-
-    return top3ProductsFull
   }
 
   async checkProductOwnership (productId, ownerId) {

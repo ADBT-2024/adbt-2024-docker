@@ -1,7 +1,7 @@
 
 import Sequelize from 'sequelize'
 import RepositoryBase from '../RepositoryBase.js'
-import { Order as OrderSequelize, Restaurant as RestaurantSequelize, RestaurantCategory as RestaurantCategorySequelize, Product as ProductSequelize, ProductCategory as ProductCategorySequelize } from './models/models.js'
+import { OrderSequelize, RestaurantSequelize, RestaurantCategorySequelize, ProductSequelize, ProductCategorySequelize } from './models/models.js'
 
 class ProductRepository extends RepositoryBase {
   async findById (id, ...args) {

@@ -1,9 +1,8 @@
 
 import { Model } from 'sequelize'
-import ProductEntity from '../../../entities/ProductEntity.js'
-
+import Product from '../../../entities/Product.js'
 const loadModel = function (sequelize, DataTypes) {
-  class Product extends Model {
+  class ProductSequelize extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -16,18 +15,18 @@ const loadModel = function (sequelize, DataTypes) {
         unityPrice: DataTypes.DOUBLE
       })
 
-      Product.belongsTo(models.Restaurant, { foreignKey: 'restaurantId', as: 'restaurant', onDelete: 'cascade' })
-      Product.belongsTo(models.ProductCategory, { foreignKey: 'productCategoryId', as: 'productCategory' })
-      Product.belongsToMany(models.Order, { as: 'orders', through: OrderProducts })
+      ProductSequelize.belongsTo(models.RestaurantSequelize, { foreignKey: 'restaurantId', as: 'restaurant', onDelete: 'cascade' })
+      ProductSequelize.belongsTo(models.ProductCategorySequelize, { foreignKey: 'productCategoryId', as: 'productCategory' })
+      ProductSequelize.belongsToMany(models.OrderSequelize, { as: 'orders', through: OrderProducts })
     }
 
     toBussinessEntity () {
-      return new ProductEntity(this.id.toString(), this.createdAt, this.updatedAt,
+      return new Product(this.id.toString(), this.createdAt, this.updatedAt,
         this.name, this.description, this.price, this.image, this.order, this.availability,
         this.restaurantId.toString(), this.productCategoryId.toString(), this.productCategory?.name)
     }
   }
-  Product.init({
+  ProductSequelize.init({
     name: DataTypes.STRING,
     description: DataTypes.STRING,
     price: DataTypes.DOUBLE,
@@ -40,6 +39,6 @@ const loadModel = function (sequelize, DataTypes) {
     sequelize,
     modelName: 'Product'
   })
-  return Product
+  return ProductSequelize
 }
 export default loadModel

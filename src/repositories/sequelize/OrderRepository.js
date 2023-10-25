@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { Op } from 'sequelize'
 import RepositoryBase from '../RepositoryBase.js'
-import { Order as OrderSequelize, Restaurant as RestaurantSequelize, Product as ProductSequelize, sequelizeSession } from './models/models.js'
+import { OrderSequelize, RestaurantSequelize, ProductSequelize, sequelizeSession } from './models/models.js'
 
 class OrderRepository extends RepositoryBase {
   async findById (id, ...args) {

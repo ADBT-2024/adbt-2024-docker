@@ -24,8 +24,7 @@ class RestaurantService {
   }
 
   async create (data) {
-    const newRestaurant = await this.restaurantRepository.create(data)
-    return newRestaurant
+    return this.restaurantRepository.create(data)
   }
 
   async show (id) {
@@ -33,7 +32,6 @@ class RestaurantService {
     if (!restaurant) {
       throw new Error('Restaurant not found')
     }
-
     processFileUris(restaurant, ['heroImage', 'logo'])
     restaurant.products = restaurant.products?.map(product => {
       processFileUris(product, ['image'])
@@ -59,12 +57,11 @@ class RestaurantService {
   }
 
   async updateAverageServiceTime (restaurantId) {
-    const updatedRestaurant = await this.restaurantRepository.updateAverageServiceTime(restaurantId)
-    return updatedRestaurant
+    return this.restaurantRepository.updateAverageServiceTime(restaurantId)
   }
 
   async exists (id) {
-    return await this.restaurantRepository.findById(id)
+    return this.restaurantRepository.findById(id)
   }
 }
 

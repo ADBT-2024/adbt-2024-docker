@@ -1,55 +1,46 @@
 import mongoose from 'mongoose'
 import moment from 'moment'
-import OrderMongoose from './models/Order.js'
 import RepositoryBase from '../RepositoryBase.js'
+import OrderMongoose from './models/OrderMongoose.js'
 
 class OrderRepository extends RepositoryBase {
   async findById (id) {
     try {
-      const order = await OrderMongoose.findById(id)
-      return order?.toBussinessEntity()
+      return OrderMongoose.findById(id)
     } catch (err) {
       return null
     }
   }
 
   async findByRestaurantId (restaurantId) {
-    const orders = await OrderMongoose.find({ restaurantId })
-    return orders.map(order => order.toBussinessEntity())
+    return OrderMongoose.find({ _restaurantId: restaurantId })
   }
 
   async indexCustomer (customerId) {
-    const orders = await OrderMongoose.aggregate([
-      {
-        $match: { userId: new mongoose.Types.ObjectId(customerId) }
-      },
-      {
-        $lookup: {
-          from: 'restaurants',
-          localField: 'restaurantId',
-          foreignField: '_id',
-          as: 'restaurant'
-        }
-      },
-      { $sort: { createdAt: 1 } },
-      {
-        $addFields: { id: '$_id' }
+    return OrderMongoose.find({ _userId: customerId }).sort('created_at').populate('restaurant')
+  }
+
+  formatOrderProducts (orderData) {
+    return orderData.products.map(orderDataProductDTO => {
+      return {
+        name: orderDataProductDTO.name,
+        image: orderDataProductDTO.image,
+        quantity: orderDataProductDTO.quantity,
+        unityPrice: orderDataProductDTO.unityPrice,
+        _id: orderDataProductDTO.id
       }
-    ])
-    return orders.map(orderDocumentObject => OrderMongoose.toBussinessEntity(orderDocumentObject))
+    })
   }
 
   async create (orderData) {
-    orderData.products.forEach(product => { product._id = product.id ? product.id : product._id })
-    const order = new OrderMongoose(orderData)
-    await order.save()
-    return order.toBussinessEntity()
+    orderData.products = this.formatOrderProducts(orderData)
+    const newOrderMongoose = new OrderMongoose(orderData)
+    return newOrderMongoose.save()
   }
 
   async update (id, orderData) {
-    orderData.products.forEach(product => { product._id = product.id ? product.id : product._id })
-    const order = await OrderMongoose.findByIdAndUpdate(id, orderData, { new: true })
-    return order.toBussinessEntity()
+    orderData.products = this.formatOrderProducts(orderData)
+    return OrderMongoose.findByIdAndUpdate(id, orderData, { new: true })
   }
 
   async destroy (id) {
@@ -59,8 +50,7 @@ class OrderRepository extends RepositoryBase {
 
   async save (entity) {
     entity.products.forEach(product => { product._id = product.id ? product.id : product._id })
-    const savedEntity = await OrderMongoose.findByIdAndUpdate(entity.id, entity, { upsert: true, new: true })
-    return savedEntity.toBussinessEntity()
+    return OrderMongoose.findByIdAndUpdate(entity.id, entity, { upsert: true, new: true })
   }
 
   async analytics (restaurantId) {

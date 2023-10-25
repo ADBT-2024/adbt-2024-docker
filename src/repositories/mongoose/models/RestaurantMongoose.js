@@ -1,16 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
-import { Order, ProductSchema } from './modelsMongoose.js'
 import moment from 'moment'
-import RestaurantEntity from '../../../entities/RestaurantEntity.js'
-
-const toBussinessEntity = (restaurant) => {
-  const products = restaurant.products ? restaurant.products.map(product => ProductSchema.statics.toBussinessEntity(product)) : null
-
-  return new RestaurantEntity(restaurant._id.toString(), restaurant.createdAt, restaurant.updatedAt,
-    restaurant.name, restaurant.description, restaurant.address, restaurant.postalCode, restaurant.url, restaurant.shippingCosts,
-    restaurant.averageServiceMinutes, restaurant.email, restaurant.phone, restaurant.logo, restaurant.heroImage,
-    restaurant.status, restaurant.restaurantCategoryId.toString(), restaurant.restaurantCategory?.[0]?.name, restaurant.userId.toString(), products)
-}
+import ProductSchema from './ProductMongoose.js'
+import OrderMongoose from './OrderMongoose.js'
 
 const restaurantSchema = new Schema({
   name: {
@@ -60,41 +51,56 @@ const restaurantSchema = new Schema({
       'temporarily closed'
     ]
   },
-  restaurantCategoryId: {
+  _restaurantCategoryId: {
     type: Schema.Types.ObjectId,
     required: 'Kindly select the restaurant category',
     ref: 'RestaurantCategory'
   },
-  userId: {
+  _userId: {
     type: Schema.Types.ObjectId,
     required: 'Kindly select the restaurant owner',
     ref: 'User'
   },
   products: [ProductSchema]
 }, {
+  virtuals: {
+    userId: {
+      get () { return this._userId.toString() },
+      set (userId) { this._userId = userId }
+    },
+    restaurantCategoryId: {
+      get () { return this._restaurantCategoryId.toString() },
+      set (restaurantCategoryId) { this._restaurantCategoryId = restaurantCategoryId }
+    }
+  },
   methods: {
     async getAverageServiceTime () {
       try {
-        const restaurantOrders = await Order.find({ restaurantId: this.id })
+        const restaurantOrders = await OrderMongoose.find({ restaurantId: this.id })
         const serviceTimes = restaurantOrders.filter(o => o.deliveredAt).map(o => moment(o.deliveredAt).diff(moment(o.createdAt), 'minutes'))
         return serviceTimes.reduce((acc, serviceTime) => acc + serviceTime, 0) / serviceTimes.length
       } catch (err) {
         return err
       }
-    },
-    toBussinessEntity () {
-      return toBussinessEntity(this)
-    }
-  },
-  statics: {
-    toBussinessEntity (restaurantDocumentObject) {
-      return toBussinessEntity(restaurantDocumentObject)
     }
   },
   strict: false,
   timestamps: true,
-  toJSON: { virtuals: true }
+  toJSON: {
+    virtuals: true,
+    transform: function (doc, resultObject, options) {
+      delete resultObject._id
+      delete resultObject.__v
+      delete resultObject._userId
+      delete resultObject._restaurantCategoryId
+      return resultObject
+    }
+  }
 })
-
-const restaurantModel = mongoose.model('Restaurants', restaurantSchema)
+restaurantSchema.virtual('restaurantCategory', {
+  ref: 'RestaurantCategory',
+  localField: '_restaurantCategoryId',
+  foreignField: '_id'
+})
+const restaurantModel = mongoose.model('Restaurant', restaurantSchema, 'restaurants')
 export default restaurantModel

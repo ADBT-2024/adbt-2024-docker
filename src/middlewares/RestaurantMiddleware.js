@@ -5,6 +5,7 @@ const checkRestaurantOwnership = async (req, res, next) => {
   const restaurantService = container.resolve('restaurantService')
   try {
     const restaurant = await restaurantService.show(req.params.restaurantId)
+    // eslint-disable-next-line eqeqeq
     if (restaurant.userId === req.user.id) {
       return next()
     }

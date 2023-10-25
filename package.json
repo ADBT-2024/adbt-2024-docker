@@ -17,10 +17,10 @@
     "sequelize-cli": "^6.5.2"
   },
   "scripts": {
-    "install-thunderclient-extension": "code --install-extension ./thunderclient-assets/rangav.vscode-thunder-client-2.5.1.vsix",
+    "install-thunderclient-extension": "code --install-extension ./thunderclient-assets/rangav.vscode-thunder-client-2.5.1.vsix --force",
     "start": "nodemon --watch src ./src/backend.js",
-    "start:sequelize": "cp .env.sequelize .env && nodemon --watch src ./src/backend.js",
-    "start:mongo-local": "cp .env.mongo.local .env && nodemon --watch src ./src/backend.js",
+    "start:sequelize": "cp .env.sequelize .env && node --inspect=0.0.0.0:9229 --watch ./src/backend.js",
+    "start:mongo-local": "cp .env.mongo.local .env && node --inspect=0.0.0.0:9229 --watch ./src/backend.js",
     "start:mongo-atlas": "cp .env.mongo.atlas .env && nodemon --watch src ./src/backend.js",
     "seed:sequelize": "cp .env.sequelize .env; npx sequelize-cli db:migrate:undo:all; npx sequelize-cli db:migrate; npx sequelize-cli db:seed:all",
     "seed:mongo-local": "cp .env.mongo.local .env && node ./src/database/seeders/mongo/seeder.js",

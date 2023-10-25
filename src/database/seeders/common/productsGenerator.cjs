@@ -27,7 +27,7 @@ const generateFakeProductMongoose = async (restaurantId, restaurantCategoryName,
 
   const price = generatePrice(restaurantCategoryName, productCategory.name)
 
-  return { _id, name, description, price, image, order, availability, productCategoryId: productCategory._id, restaurantId, createdAt, updatedAt }
+  return { _id, name, description, price, image, order, availability, _productCategoryId: productCategory._id, restaurantId, createdAt, updatedAt }
 }
 
 const generateFakeProductSequelize = async (restaurantId, restaurantCategoryName, queryInterface) => {

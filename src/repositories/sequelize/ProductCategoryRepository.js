@@ -1,6 +1,6 @@
 
 import RepositoryBase from '../RepositoryBase.js'
-import { ProductCategory as ProductCategorySequelize } from './models/models.js'
+import { ProductCategorySequelize } from './models/models.js'
 
 class ProductCategoryRepository extends RepositoryBase {
   async findAll (...args) {

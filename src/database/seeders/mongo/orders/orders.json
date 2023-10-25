@@ -11,8 +11,8 @@
       "price": 15,
       "address": "Fake street 123",
       "shippingCosts": 0,
-      "restaurantId": {"$oid": "6400897a9262622bea152962"},
-      "userId": {"$oid": "63f74bf8eeed64054274b52d"},
+      "_restaurantId": {"$oid": "6400897a9262622bea152962"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b52d"},
       "updatedAt": {"$date": "2023-02-20T11:22:04.000Z"},
       "products": [
         {
@@ -62,8 +62,8 @@
       "price": 19.5,
       "address": "Fake street 123 modificada",
       "shippingCosts": 0,
-      "restaurantId": {"$oid": "6400897a9262622bea152962"},
-      "userId": {"$oid": "63f74bf8eeed64054274b52d"},
+      "_restaurantId": {"$oid": "6400897a9262622bea152962"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b52d"},
       "updatedAt": {"$date": "2023-02-20T11:22:04.000Z"},
       "products": [
         {
@@ -111,8 +111,8 @@
       "price": 12.5,
       "address": "Fake street 123",
       "shippingCosts": 0,
-      "restaurantId": {"$oid": "6400897a9262622bea152962"},
-      "userId": {"$oid": "63f74bf8eeed64054274b52d"},
+      "_restaurantId": {"$oid": "6400897a9262622bea152962"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b52d"},
       "updatedAt": {"$date": "2023-02-20T11:22:04.000Z"},
       "products": [
         {
@@ -160,8 +160,8 @@
       "price": 18,
       "address": "Fake street 123",
       "shippingCosts": 0,
-      "restaurantId": {"$oid": "6400897a9262622bea152962"},
-      "userId": {"$oid": "63f74bf8eeed64054274b52d"},
+      "_restaurantId": {"$oid": "6400897a9262622bea152962"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b52d"},
       "updatedAt": {"$date": "2023-02-20T11:22:04.000Z"},
       "products": [
         {
@@ -222,8 +222,8 @@
       "price": 6,
       "address": "Fake street 123",
       "shippingCosts": 1.5,
-      "restaurantId": {"$oid": "640090ba9f8c9db5fafe4aee"},
-      "userId": {"$oid": "63f74bf8eeed64054274b52d"},
+      "_restaurantId": {"$oid": "640090ba9f8c9db5fafe4aee"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b52d"},
       "updatedAt": {"$date": "2023-02-20T11:22:04.000Z"},
       "products": [
         {
@@ -262,8 +262,8 @@
       "price": 10.5,
       "address": "Otra direccion",
       "shippingCosts": 1.5,
-      "restaurantId": {"$oid": "640090ba9f8c9db5fafe4aee"},
-      "userId": {"$oid": "63f74bf8eeed64054274b52d"},
+      "_restaurantId": {"$oid": "640090ba9f8c9db5fafe4aee"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b52d"},
       "updatedAt": {"$date": "2023-02-20T11:22:04.000Z"},
       "products": [
         {
@@ -334,8 +334,8 @@
       "price": 45,
       "address": "Edited address",
       "shippingCosts": 0,
-      "restaurantId": {"$oid": "6400897a9262622bea152962"},
-      "userId": {"$oid": "63f74bf8eeed64054274b52d"},
+      "_restaurantId": {"$oid": "6400897a9262622bea152962"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b52d"},
       "updatedAt": {"$date": "2023-02-20T11:22:19.000Z"},
       "products": [
         {

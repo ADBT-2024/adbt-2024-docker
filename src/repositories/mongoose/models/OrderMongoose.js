@@ -1,11 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
-import OrderEntity, { OrderedProduct } from '../../../entities/OrderEntity.js'
-import orderedProductSchema from './OrderedProduct.js'
-
-const toBussinessEntity = (order) => {
-  const orderedProducts = order.products.map(product => new OrderedProduct(product._id, product.createdAt, product.updatedAt, product.name, product.image, product.quantity, product.unityPrice))
-  return new OrderEntity(order._id.toString(), order.createdAt, order.updatedAt, order.startedAt, order.sentAt, order.deliveredAt, order?.status, order.price, order.address, order.shippingCosts, order.restaurantId.toString(), order.userId.toString(), orderedProducts)
-}
+import orderedProductSchema from './OrderedProductMongoose.js'
 
 const orderSchema = new Schema({
   createdAt: {
@@ -33,31 +27,40 @@ const orderSchema = new Schema({
     type: Number,
     required: 'Kindly enter de delivery address'
   },
-  restaurantId: {
+  _restaurantId: {
     type: Schema.Types.ObjectId,
     required: 'Kindly select the restaurant owner',
     ref: 'Restaurant'
   },
-  userId: {
+  _userId: {
     type: Schema.Types.ObjectId,
     required: 'Kindly select the restaurant owner',
     ref: 'User'
   },
   products: [orderedProductSchema]
 }, {
-  methods: {
-    toBussinessEntity () {
-      return toBussinessEntity(this)
-    }
-  },
-  statics: {
-    toBussinessEntity (orderDocumentObject) {
-      return toBussinessEntity(orderDocumentObject)
+  virtuals: {
+    userId: {
+      get () { return this._userId.toString() },
+      set (userId) { this._userId = userId }
+    },
+    restaurantId: {
+      get () { return this._restaurantId.toString() },
+      set (restaurantId) { this._restaurantId = restaurantId }
     }
   },
   strict: false,
   timestamps: true,
-  toJSON: { virtuals: true }
+  toJSON: {
+    virtuals: true,
+    transform: function (doc, resultObject, options) {
+      delete resultObject._id
+      delete resultObject.__v
+      delete resultObject._userId
+      delete resultObject._restaurantId
+      return resultObject
+    }
+  }
 })
 
 orderSchema.virtual('status').get(function () {
@@ -66,6 +69,11 @@ orderSchema.virtual('status').get(function () {
   if (this.startedAt) { return 'in process' }
   return 'pending'
 })
+orderSchema.virtual('restaurant', {
+  ref: 'Restaurant',
+  localField: '_restaurantId',
+  foreignField: '_id'
+})
 
-const orderModel = mongoose.model('Orders', orderSchema)
+const orderModel = mongoose.model('Order', orderSchema, 'orders')
 export default orderModel

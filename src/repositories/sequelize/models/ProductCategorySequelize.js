@@ -1,9 +1,9 @@
 
 import { Model } from 'sequelize'
-import RestaurantCategoryEntity from '../../../entities/RestaurantCategoryEntity.js'
+import ProductCategory from '../../../entities/ProductCategory.js'
 
 const loadModel = function (sequelize, DataTypes) {
-  class RestaurantCategory extends Model {
+  class ProductCategorySequelize extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,14 +11,14 @@ const loadModel = function (sequelize, DataTypes) {
      */
     static associate (models) {
       // define association here
-      RestaurantCategory.hasMany(models.Restaurant, { foreignKey: 'restaurantCategoryId' })
+      ProductCategorySequelize.hasMany(models.ProductSequelize)
     }
 
     toBussinessEntity () {
-      return new RestaurantCategoryEntity(this.id, this.createdAt, this.updatedAt, this.name)
+      return new ProductCategory(this.id, this.createdAt, this.updatedAt, this.name)
     }
   }
-  RestaurantCategory.init({
+  ProductCategorySequelize.init({
     name: DataTypes.STRING,
     createdAt: {
       allowNull: false,
@@ -32,8 +32,8 @@ const loadModel = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    modelName: 'RestaurantCategory'
+    modelName: 'ProductCategory'
   })
-  return RestaurantCategory
+  return ProductCategorySequelize
 }
 export default loadModel

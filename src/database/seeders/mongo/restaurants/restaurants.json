@@ -14,10 +14,10 @@
       "logo": "public/restaurants/mañanaRestaurantLogo.png",
       "heroImage": "public/restaurants/mañanaRestaurantHero.jpeg",
       "status": "closed",
-      "restaurantCategoryId": {
+      "_restaurantCategoryId": {
         "$oid": "63f795d2dae3fdc89fd39a41"
       },
-      "userId": {"$oid": "63f74bf8eeed64054274b529"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b529"},
       "createdAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "updatedAt": {"$date": "2023-02-20T11:22:12.000Z"},
       "products": [
@@ -204,10 +204,10 @@
       "logo": "public/restaurants/100MontaditosLogo.jpeg",
       "heroImage": "public/restaurants/100MontaditosHero.jpeg",
       "status": "online",
-      "restaurantCategoryId": {
+      "_restaurantCategoryId": {
         "$oid": "63f795cedae3fdc89fd39a39"
       },
-      "userId": {"$oid": "63f74bf8eeed64054274b529"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b529"},
       "createdAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "updatedAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "products": [
@@ -375,10 +375,10 @@
       "logo": "",
       "heroImage": "",
       "status": "online",
-      "restaurantCategoryId": {
+      "_restaurantCategoryId": {
         "$oid": "63f795cedae3fdc89fd39a39"
       } ,
-      "userId": {"$oid": "63f74bf8eeed64054274b529"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b529"},
       "createdAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "updatedAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "products": [
@@ -13400,10 +13400,10 @@
       "logo": "",
       "heroImage": "",
       "status": "closed",
-      "restaurantCategoryId": {
+      "_restaurantCategoryId": {
         "$oid": "63f795cedae3fdc89fd39a39"
       } ,
-      "userId": {"$oid": "63f74bf8eeed64054274b529"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b529"},
       "createdAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "updatedAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "products": []
@@ -13424,10 +13424,10 @@
       "logo": "",
       "heroImage": "",
       "status": "online",
-      "restaurantCategoryId": {
+      "_restaurantCategoryId": {
         "$oid": "63f795cedae3fdc89fd39a39"
       } ,
-      "userId": {"$oid": "63f74bf8eeed64054274b529"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b529"},
       "createdAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "updatedAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "products": [
@@ -13839,10 +13839,10 @@
       "logo": "",
       "heroImage": "",
       "status": "online",
-      "restaurantCategoryId": {
+      "_restaurantCategoryId": {
         "$oid": "63f795cedae3fdc89fd39a39"
       } ,
-      "userId": {"$oid": "63f74bf8eeed64054274b529"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b529"},
       "createdAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "updatedAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "products": [
@@ -14514,10 +14514,10 @@
       "logo": "",
       "heroImage": "",
       "status": "online",
-      "restaurantCategoryId": {
+      "_restaurantCategoryId": {
         "$oid": "63f795cedae3fdc89fd39a39"
       } ,
-      "userId": {"$oid": "63f74bf8eeed64054274b529"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b529"},
       "createdAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "updatedAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "products": [
@@ -15839,10 +15839,10 @@
       "logo": "",
       "heroImage": "",
       "status": "online",
-      "restaurantCategoryId": {
+      "_restaurantCategoryId": {
         "$oid": "63f795cedae3fdc89fd39a39"
       } ,
-      "userId": {"$oid": "63f74bf8eeed64054274b529"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b529"},
       "createdAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "updatedAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "products": [
@@ -18464,10 +18464,10 @@
       "logo": "",
       "heroImage": "",
       "status": "online",
-      "restaurantCategoryId": {
+      "_restaurantCategoryId": {
         "$oid": "63f795cedae3fdc89fd39a39"
       } ,
-      "userId": {"$oid": "63f74bf8eeed64054274b529"},
+      "_userId": {"$oid": "63f74bf8eeed64054274b529"},
       "createdAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "updatedAt": {"$date": "2023-02-20T11:22:05.000Z"},
       "products": [

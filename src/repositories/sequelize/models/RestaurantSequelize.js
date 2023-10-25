@@ -1,10 +1,10 @@
 
 import moment from 'moment'
 import { Model } from 'sequelize'
-import RestaurantEntity from '../../../entities/RestaurantEntity.js'
+import Restaurant from '../../../entities/Restaurant.js'
 
 const loadModel = function (sequelize, DataTypes) {
-  class Restaurant extends Model {
+  class RestaurantSequelize extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -12,10 +12,10 @@ const loadModel = function (sequelize, DataTypes) {
      */
     static associate (models) {
       // define association here
-      Restaurant.belongsTo(models.RestaurantCategory, { foreignKey: 'restaurantCategoryId', as: 'restaurantCategory' })
-      Restaurant.belongsTo(models.User, { foreignKey: 'userId', as: 'user' })
-      Restaurant.hasMany(models.Product, { foreignKey: 'restaurantId', as: 'products' })
-      Restaurant.hasMany(models.Order, { foreignKey: 'restaurantId', as: 'orders' })
+      RestaurantSequelize.belongsTo(models.RestaurantCategorySequelize, { foreignKey: 'restaurantCategoryId', as: 'restaurantCategory' })
+      RestaurantSequelize.belongsTo(models.UserSequelize, { foreignKey: 'userId', as: 'user' })
+      RestaurantSequelize.hasMany(models.ProductSequelize, { foreignKey: 'restaurantId', as: 'products' })
+      RestaurantSequelize.hasMany(models.OrderSequelize, { foreignKey: 'restaurantId', as: 'orders' })
     }
 
     async getAverageServiceTime () {
@@ -31,13 +31,13 @@ const loadModel = function (sequelize, DataTypes) {
     toBussinessEntity () {
       const products = this.products ? this.products.map(product => product.toBussinessEntity()) : null
 
-      return new RestaurantEntity(this.id, this.createdAt, this.updatedAt,
+      return new Restaurant(this.id, this.createdAt, this.updatedAt,
         this.name, this.description, this.address, this.postalCode, this.url, this.shippingCosts,
         this.averageServiceMinutes, this.email, this.phone, this.logo, this.heroImage,
         this.status, this.restaurantCategoryId, this.restaurantCategory?.name, this.userId, products)
     }
   }
-  Restaurant.init({
+  RestaurantSequelize.init({
     name: DataTypes.STRING,
     description: DataTypes.TEXT,
     address: DataTypes.STRING,
@@ -80,6 +80,6 @@ const loadModel = function (sequelize, DataTypes) {
     sequelize,
     modelName: 'Restaurant'
   })
-  return Restaurant
+  return RestaurantSequelize
 }
 export default loadModel

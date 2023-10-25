@@ -1,5 +1,5 @@
 import RepositoryBase from '../RepositoryBase.js'
-import { User as UserSequelize } from './models/models.js'
+import { UserSequelize } from './models/models.js'
 
 class UserRepository extends RepositoryBase {
   async findById (id, ...args) {

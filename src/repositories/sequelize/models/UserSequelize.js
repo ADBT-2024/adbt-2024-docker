@@ -1,12 +1,12 @@
 
 import { Model } from 'sequelize'
 import bcrypt from 'bcryptjs'
-import UserEntity from '../../../entities/UserEntity.js'
+import User from '../../../entities/User.js'
 
 const salt = bcrypt.genSaltSync(5)
 
 const loadModel = function (sequelize, DataTypes) {
-  class User extends Model {
+  class UserSequelize extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -14,15 +14,15 @@ const loadModel = function (sequelize, DataTypes) {
      */
     static associate (models) {
       // define association here
-      User.hasMany(models.Restaurant, { foreignKey: 'userId' })
-      User.hasMany(models.Order, { foreignKey: 'userId' })
+      UserSequelize.hasMany(models.RestaurantSequelize, { foreignKey: 'userId' })
+      UserSequelize.hasMany(models.OrderSequelize, { foreignKey: 'userId' })
     }
 
     toBussinessEntity () {
-      return new UserEntity(this.id, this.createdAt, this.updatedAt, this.firstName, this.lastName, this.email, this.password, this.token, this.tokenExpiration, this.phone, this.avatar, this.address, this.postalCode, this.userType)
+      return new User(this.id, this.createdAt, this.updatedAt, this.firstName, this.lastName, this.email, this.password, this.token, this.tokenExpiration, this.phone, this.avatar, this.address, this.postalCode, this.userType)
     }
   }
-  User.init({
+  UserSequelize.init({
     firstName: {
       allowNull: false,
       type: DataTypes.STRING
@@ -97,6 +97,6 @@ const loadModel = function (sequelize, DataTypes) {
     sequelize,
     modelName: 'User'
   })
-  return User
+  return UserSequelize
 }
 export default loadModel

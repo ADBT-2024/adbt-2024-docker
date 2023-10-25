@@ -44,7 +44,7 @@ const generateOrders = async (nOrders, technology = 'mongoose', queryInterface =
 const generateFakeOrderMongoose = async (address, restaurant, userId) => {
   const { createdAt, updatedAt, startedAt, sentAt, deliveredAt, price, shippingCosts, products } = await generateCommonFakeOrderProperties(restaurant.products, restaurant.shippingCosts)
 
-  return { createdAt, updatedAt, startedAt, sentAt, deliveredAt, price, address, shippingCosts, restaurantId: restaurant._id, userId, products }
+  return { createdAt, updatedAt, startedAt, sentAt, deliveredAt, price, address, shippingCosts, _restaurantId: restaurant._id, _userId: userId, products }
 }
 
 const generateFakeOrderSequelize = async (address, availableOrderId, restaurant, userId, restaurantProducts) => {

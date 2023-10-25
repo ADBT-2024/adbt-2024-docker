@@ -1,6 +1,6 @@
 
 import RepositoryBase from '../RepositoryBase.js'
-import { RestaurantCategory as RestaurantCategorySequelize } from './models/models.js'
+import { RestaurantCategorySequelize } from './models/models.js'
 
 class RestaurantCategoryRepository extends RepositoryBase {
   async findAll (...args) {

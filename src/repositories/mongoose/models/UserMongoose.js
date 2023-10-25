@@ -1,6 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'bcryptjs'
-import UserEntity from '../../../entities/UserEntity.js'
 
 const userSchema = new Schema({
   firstName: {
@@ -52,14 +51,19 @@ const userSchema = new Schema({
   methods: {
     async verifyPassword (password) {
       return await bcrypt.compare(password, this.password)
-    },
-    toBussinessEntity () {
-      return new UserEntity(this._id.toString(), this.createdAt, this.updatedAt, this.firstName, this.lastName, this.email, this.password, this.token, this.tokenExpiration, this.phone, this.avatar, this.address, this.postalCode, this.userType)
     }
   },
   strict: false,
   timestamps: true,
-  toJSON: { virtuals: true }
+  toJSON: {
+    virtuals: true,
+    transform: function (doc, resultObject, options) {
+      delete resultObject._id
+      delete resultObject.__v
+      delete resultObject.password
+      return resultObject
+    }
+  }
 })
 
 userSchema.index({ email: 1 })
@@ -81,6 +85,6 @@ userSchema.pre('save', function (callback) {
   })
 })
 
-const userModel = mongoose.model('Users', userSchema)
+const userModel = mongoose.model('User', userSchema, 'users')
 
 export default userModel

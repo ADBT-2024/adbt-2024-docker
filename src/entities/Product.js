@@ -1,6 +1,6 @@
 import BaseEntity from './BaseEntity.js'
 
-class ProductEntity extends BaseEntity {
+class Product extends BaseEntity {
   name
   description
   price
@@ -25,4 +25,4 @@ class ProductEntity extends BaseEntity {
   }
 }
 
-export default ProductEntity
+export default Product

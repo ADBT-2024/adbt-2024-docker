@@ -1,6 +1,6 @@
 
 import RepositoryBase from '../RepositoryBase.js'
-import { Restaurant as RestaurantSequelize, RestaurantCategory as RestaurantCategorySequelize, Product as ProductSequelize, ProductCategory as ProductCategorySequelize } from './models/models.js'
+import { RestaurantSequelize, RestaurantCategorySequelize, ProductSequelize, ProductCategorySequelize } from './models/models.js'
 
 class RestaurantRepository extends RepositoryBase {
   async findById (id, ...args) {

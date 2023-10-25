@@ -1,6 +1,6 @@
 import BaseEntity from './BaseEntity.js'
 
-class UserEntity extends BaseEntity {
+class User extends BaseEntity {
   firstName
   lastName
   email
@@ -29,4 +29,4 @@ class UserEntity extends BaseEntity {
   }
 }
 
-export default UserEntity
+export default User

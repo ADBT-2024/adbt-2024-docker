@@ -1,6 +1,6 @@
 import BaseEntity from './BaseEntity.js'
 
-class ProductCategoryEntity extends BaseEntity {
+class ProductCategory extends BaseEntity {
   name
 
   constructor (id, createdAt, updatedAt, name) {
@@ -9,4 +9,4 @@ class ProductCategoryEntity extends BaseEntity {
   }
 }
 
-export default ProductCategoryEntity
+export default ProductCategory

@@ -76,11 +76,11 @@ class UserService {
     if (!user) {
       throw new Error('User not found')
     }
-
     processFileUris(user, ['avatar'])
     const propertiesToBeRemoved = ['password', 'createdAt', 'updatedAt', 'token', 'tokenExpiration', 'phone']
-    propertiesToBeRemoved.forEach(property => delete user[property])
-    return user
+    const userObject = user.toObject()
+    propertiesToBeRemoved.forEach(property => delete userObject[property])
+    return userObject
   }
 
   async update (id, data) {

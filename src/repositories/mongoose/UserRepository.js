@@ -1,24 +1,21 @@
 import RepositoryBase from '../RepositoryBase.js'
-import UserMongoose from './models/User.js'
+import UserMongoose from './models/UserMongoose.js'
 
 class UserRepository extends RepositoryBase {
   async findById (id, ...args) {
     try {
-      const entity = await UserMongoose.findById(id)
-      return entity?.toBussinessEntity()
+      return UserMongoose.findById(id)
     } catch (err) {
       return null
     }
   }
 
   async create (businessEntity, ...args) {
-    const entity = new UserMongoose(businessEntity)
-    return (await entity.save())?.toBussinessEntity()
+    return (new UserMongoose(businessEntity)).save()
   }
 
   async update (id, businessEntity, ...args) {
-    const entity = await UserMongoose.findOneAndUpdate({ _id: id }, businessEntity, { new: true, exclude: ['password'] })
-    return entity?.toBussinessEntity()
+    return UserMongoose.findOneAndUpdate({ _id: id }, businessEntity, { new: true, exclude: ['password'] })
   }
 
   async destroy (id, ...args) {
@@ -27,27 +24,23 @@ class UserRepository extends RepositoryBase {
   }
 
   async save (entity) {
-    const savedEntity = await UserMongoose.findByIdAndUpdate(entity.id, entity, { upsert: true, new: true })
-    return savedEntity?.toBussinessEntity()
+    return UserMongoose.findByIdAndUpdate(entity.id, entity, { upsert: true, new: true })
   }
 
   async findByToken (token) {
-    const entity = await UserMongoose.findOne({ token }, { password: 0 })
-    return entity?.toBussinessEntity()
+    return UserMongoose.findOne({ token }, { password: 0 })
   }
 
   async findOwnerByEmail (email) {
-    const entity = await this._findByEmailAndUserType(email, 'owner')
-    return entity?.toBussinessEntity()
+    return this._findByEmailAndUserType(email, 'owner')
   }
 
   async findCustomerByEmail (email) {
-    const entity = await this._findByEmailAndUserType(email, 'customer')
-    return entity?.toBussinessEntity()
+    return this._findByEmailAndUserType(email, 'customer')
   }
 
   async _findByEmailAndUserType (email, userType) {
-    return await UserMongoose.findOne({ email, userType })
+    return UserMongoose.findOne({ email, userType })
   }
 }
 

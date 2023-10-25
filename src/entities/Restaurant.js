@@ -1,6 +1,6 @@
 import BaseEntity from './BaseEntity.js'
 
-class RestaurantEntity extends BaseEntity {
+class Restaurant extends BaseEntity {
   name
   description
   address
@@ -39,4 +39,4 @@ class RestaurantEntity extends BaseEntity {
   }
 }
 
-export default RestaurantEntity
+export default Restaurant

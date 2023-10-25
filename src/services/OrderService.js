@@ -24,25 +24,22 @@ class OrderService {
   }
 
   async indexCustomer (customerId) {
-    const orders = await this.orderRepository.indexCustomer(customerId)
-    return orders
+    return this.orderRepository.indexCustomer(customerId)
   }
 
   async getProductsFromProductLines (productLines, restaurantId) {
     const productLinesIds = productLines.map(productLine => productLine.productId)
-    const restaurantWithProducts = await this.restaurantRepository.findById(restaurantId, { lean: true })
+    const restaurantWithProducts = await this.restaurantRepository.findById(restaurantId)
     const products = restaurantWithProducts.products
     const productsFromProductLines = products.filter(product => productLinesIds.includes(product.id))
-    const sortedProducts = this.#equalProductsArraysSorting(productsFromProductLines, productLines)
-    return sortedProducts
+    return this.#equalProductsArraysSorting(productsFromProductLines, productLines)
   }
 
   #equalProductsArraysSorting (productsToBeSorted, sortedProductsArray) {
-    const sortedProducts = sortedProductsArray.map(obj2 => {
+    return sortedProductsArray.map(obj2 => {
       const index = productsToBeSorted.findIndex(obj1 => obj1.id === obj2.productId)
       return productsToBeSorted[index]
     })
-    return sortedProducts
   }
 
   async #getProductLinesWithPrices (productLines, restaurantId) {
@@ -54,8 +51,7 @@ class OrderService {
   }
 
   #computeOrderProductsPrice (productLinesWithPrices) {
-    const orderPrice = productLinesWithPrices.reduce((total, productLineWithPrice) => total + productLineWithPrice.quantity * productLineWithPrice.unityPrice, 0)
-    return orderPrice
+    return productLinesWithPrices.reduce((total, productLineWithPrice) => total + productLineWithPrice.quantity * productLineWithPrice.unityPrice, 0)
   }
 
   async #computeShippingCosts (priceOfProducts, restaurantId) {
@@ -79,15 +75,13 @@ class OrderService {
   async #saveOrderWithProducts (order, productLines) {
     const products = await this.getProductsFromProductLines(productLines, order.restaurantId)
     order.products = this.#getProductsWithOrderedProducts(products, productLines)
-    const savedOrder = await this.orderRepository.create(order)
-    return savedOrder
+    return this.orderRepository.create(order)
   }
 
   async #updateOrderWithProducts (order, productLines) {
     const products = await this.getProductsFromProductLines(productLines, order.restaurantId)
     order.products = this.#getProductsWithOrderedProducts(products, productLines)
-    const savedOrder = await this.orderRepository.update(order.id, order)
-    return savedOrder
+    return this.orderRepository.update(order.id, order)
   }
 
   async #getOrderWithShippingCostsAndPrice (order, productLinesWithPrices) {
@@ -110,8 +104,7 @@ class OrderService {
     orderToBeUpdated.id = currentlySavedOrder.id
     const productLinesWithPrices = await this.#getProductLinesWithPrices(orderToBeUpdated.products, orderToBeUpdated.restaurantId)
     orderToBeUpdated = await this.#getOrderWithShippingCostsAndPrice(orderToBeUpdated, productLinesWithPrices)
-    const updatedOrder = await this.#updateOrderWithProducts(orderToBeUpdated, productLinesWithPrices)
-    return updatedOrder
+    return this.#updateOrderWithProducts(orderToBeUpdated, productLinesWithPrices)
   }
 
   async destroy (id) {
@@ -140,15 +133,13 @@ class OrderService {
   async confirm (id) {
     const order = await this.orderRepository.findById(id)
     order.startedAt = new Date()
-    const confirmedOrder = await this.orderRepository.save(order)
-    return confirmedOrder
+    return this.orderRepository.save(order)
   }
 
   async send (id) {
     const order = await this.orderRepository.findById(id)
     order.sentAt = new Date()
-    const sentOrder = await this.orderRepository.save(order)
-    return sentOrder
+    return this.orderRepository.save(order)
   }
 
   async deliver (id) {
@@ -168,8 +159,7 @@ class OrderService {
   }
 
   async analytics (restaurantId) {
-    const analytics = await this.orderRepository.analytics(restaurantId)
-    return analytics
+    return this.orderRepository.analytics(restaurantId)
   }
 
   async checkOrderOwnership (orderId, ownerId) {
@@ -200,7 +190,6 @@ class OrderService {
   async productsBelongToSameRestaurant (order, productLines, orderId) {
     const restaurantId = await this.getRestaurantIdOfOrder(order, orderId)
     const products = await this.getProductsFromProductLines(productLines, restaurantId)
-
     return !(products.length === 0 || products.length !== productLines.length || products.find(product => product.restaurantId !== restaurantId))
   }
 

@@ -1,6 +1,6 @@
 import BaseEntity from './BaseEntity.js'
 
-class OrderEntity extends BaseEntity {
+class Order extends BaseEntity {
   startedAt
   sentAt
   deliveredAt
@@ -39,5 +39,5 @@ class OrderedProduct extends BaseEntity {
   }
 }
 
-export default OrderEntity
+export default Order
 export { OrderedProduct }
