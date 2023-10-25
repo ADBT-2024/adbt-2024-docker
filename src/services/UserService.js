@@ -78,8 +78,10 @@ class UserService {
     }
     processFileUris(user, ['avatar'])
     const propertiesToBeRemoved = ['password', 'createdAt', 'updatedAt', 'token', 'tokenExpiration', 'phone']
-    const userObject = user.toObject()
-    propertiesToBeRemoved.forEach(property => delete userObject[property])
+    const userObject = Object.assign({}, user)
+    propertiesToBeRemoved.forEach((property) => {
+      delete userObject[property]
+    })
     return userObject
   }
 
