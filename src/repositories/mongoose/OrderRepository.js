@@ -16,8 +16,23 @@ class OrderRepository extends RepositoryBase {
     return OrderMongoose.find({ _restaurantId: restaurantId })
   }
 
-  async indexCustomer (customerId) {
-    return OrderMongoose.find({ _userId: customerId }).sort('created_at').populate('restaurant')
+  async indexCustomer (customerId, page = 1, limit = 10) {
+    const skip = (page - 1) * limit
+    const orders = await OrderMongoose.find({ _userId: customerId })
+      .sort('created_at')
+      .skip(skip)
+      .limit(limit)
+      .populate('restaurant')
+    const total = await OrderMongoose.countDocuments({ _userId: customerId })
+    return {
+      items: orders,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      }
+    }
   }
 
   formatOrderProducts (orderData) {

@@ -105,7 +105,7 @@
     "method": "GET",
     "sortNum": 2500,
     "created": "2021-07-25T08:18:17.295Z",
-    "modified": "2023-03-25T08:53:30.804Z",
+    "modified": "2023-10-26T08:08:15.792Z",
     "headers": [],
     "params": [],
     "auth": {
@@ -121,7 +121,7 @@
       },
       {
         "type": "set-env-var",
-        "custom": "json[0].id",
+        "custom": "json.items[0].id",
         "action": "setto",
         "value": "{{customer1OrderId}}"
       }
@@ -210,7 +210,7 @@
     "method": "GET",
     "sortNum": 30000,
     "created": "2021-07-25T08:18:17.295Z",
-    "modified": "2023-03-23T17:35:44.799Z",
+    "modified": "2023-10-25T17:59:59.391Z",
     "headers": [
       {
         "name": "Accept",
@@ -232,13 +232,13 @@
       {
         "type": "json-query",
         "custom": "json.password",
-        "action": "notequal",
+        "action": "istype",
         "value": "undefined"
       },
       {
         "type": "json-query",
         "custom": "json.token",
-        "action": "notequal",
+        "action": "istype",
         "value": "undefined"
       }
     ]
@@ -2669,7 +2669,7 @@
     "method": "GET",
     "sortNum": 20000,
     "created": "2023-02-13T10:35:30.990Z",
-    "modified": "2023-03-14T19:16:44.637Z",
+    "modified": "2023-10-26T08:08:44.644Z",
     "headers": [],
     "params": [],
     "auth": {
@@ -2684,14 +2684,8 @@
         "value": "200"
       },
       {
-        "type": "res-body",
-        "custom": "",
-        "action": "istype",
-        "value": "array"
-      },
-      {
-        "type": "res-body",
-        "custom": "",
+        "type": "json-query",
+        "custom": "json.items",
         "action": "count",
         "value": "0"
       }
@@ -3212,7 +3206,7 @@
     "method": "GET",
     "sortNum": 110000,
     "created": "2023-02-13T10:35:31.001Z",
-    "modified": "2023-03-14T19:17:58.855Z",
+    "modified": "2023-10-26T08:09:07.787Z",
     "headers": [],
     "params": [],
     "auth": {
@@ -3227,14 +3221,8 @@
         "value": "200"
       },
       {
-        "type": "res-body",
-        "custom": "",
-        "action": "istype",
-        "value": "array"
-      },
-      {
-        "type": "res-body",
-        "custom": "",
+        "type": "json-query",
+        "custom": "json.items",
         "action": "count",
         "value": "2"
       }
@@ -3919,7 +3907,7 @@
     "method": "GET",
     "sortNum": 2500,
     "created": "2023-03-28T06:10:17.170Z",
-    "modified": "2023-03-28T06:10:17.170Z",
+    "modified": "2023-10-26T08:02:05.713Z",
     "headers": [],
     "params": [],
     "auth": {
@@ -3935,7 +3923,7 @@
       },
       {
         "type": "set-env-var",
-        "custom": "json[0].id",
+        "custom": "json.items[0].id",
         "action": "setto",
         "value": "{{customer1OrderId}}"
       }
@@ -3950,7 +3938,7 @@
     "method": "GET",
     "sortNum": 2500,
     "created": "2023-03-28T06:10:17.171Z",
-    "modified": "2023-03-28T06:10:17.171Z",
+    "modified": "2023-10-26T07:20:22.608Z",
     "headers": [],
     "params": [],
     "tests": [
@@ -3962,7 +3950,7 @@
       },
       {
         "type": "json-query",
-        "custom": "json[0].id",
+        "custom": "json.[0].id",
         "action": "notequal",
         "value": "null"
       },
@@ -4586,7 +4574,7 @@
     "method": "GET",
     "sortNum": 20000,
     "created": "2023-03-28T06:10:17.189Z",
-    "modified": "2023-03-28T06:10:17.189Z",
+    "modified": "2023-10-26T08:04:37.496Z",
     "headers": [],
     "params": [],
     "auth": {
@@ -4601,14 +4589,8 @@
         "value": "200"
       },
       {
-        "type": "res-body",
-        "custom": "",
-        "action": "istype",
-        "value": "array"
-      },
-      {
-        "type": "res-body",
-        "custom": "",
+        "type": "json-query",
+        "custom": "json.items",
         "action": "count",
         "value": "0"
       }
@@ -6465,7 +6447,7 @@
     "method": "GET",
     "sortNum": 110000,
     "created": "2023-03-28T06:10:17.231Z",
-    "modified": "2023-03-28T06:10:17.231Z",
+    "modified": "2023-10-26T08:05:46.188Z",
     "headers": [],
     "params": [],
     "auth": {
@@ -6480,14 +6462,8 @@
         "value": "200"
       },
       {
-        "type": "res-body",
-        "custom": "",
-        "action": "istype",
-        "value": "array"
-      },
-      {
-        "type": "res-body",
-        "custom": "",
+        "type": "json-query",
+        "custom": "json.items",
         "action": "count",
         "value": "2"
       }

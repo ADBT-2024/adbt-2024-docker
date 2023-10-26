@@ -148,12 +148,7 @@
     ],
     "settings": {
       "headers": [],
-      "tests": [],
-      "runOptions": {
-        "delay": 0,
-        "iterations": 10,
-        "dataFilePath": ""
-      }
+      "tests": []
     }
   }
 ]

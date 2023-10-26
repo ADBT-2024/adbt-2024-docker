@@ -20,7 +20,8 @@ class OrderRepository extends RepositoryBase {
     return orders.map(order => order.toBussinessEntity())
   }
 
-  async indexCustomer (customerId) {
+  async indexCustomer (customerId, page = 1, limit = 10) {
+    const offset = (page - 1) * limit
     const orders = await OrderSequelize.findAll({
       where: {
         userId: customerId
@@ -34,9 +35,20 @@ class OrderRepository extends RepositoryBase {
         as: 'restaurant',
         attributes: ['name', 'description', 'address', 'postalCode', 'url', 'shippingCosts', 'averageServiceMinutes', 'email', 'phone', 'logo', 'heroImage', 'status', 'restaurantCategoryId']
       }],
-      order: [['createdAt', 'DESC']]
+      order: [['createdAt', 'DESC']],
+      limit,
+      offset
     })
-    return orders.map(order => order.toBussinessEntity())
+    const total = await OrderSequelize.count({ where: { userId: customerId } })
+    return {
+      items: orders.map(order => order.toBussinessEntity()),
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      }
+    }
   }
 
   async #saveOrderProducts (order, productLines, transaction) {
