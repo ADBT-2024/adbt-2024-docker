@@ -1,5 +1,6 @@
 import RepositoryBase from '../RepositoryBase.js'
 import UserMongoose from './models/UserMongoose.js'
+import { UserSequelize } from '../sequelize/models/models.js'
 
 class UserRepository extends RepositoryBase {
   async findById (id, ...args) {
@@ -16,6 +17,10 @@ class UserRepository extends RepositoryBase {
 
   async update (id, businessEntity, ...args) {
     return UserMongoose.findOneAndUpdate({ _id: id }, businessEntity, { new: true, exclude: ['password'] })
+  }
+
+  async updateToken (id, tokenDTO, ...args) {
+    return this.update(id, tokenDTO, args)
   }
 
   async destroy (id, ...args) {

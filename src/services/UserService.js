@@ -9,16 +9,16 @@ class UserService {
     this.userRepository = container.resolve('userRepository')
   }
 
-  _updateUserToken (user) {
-    user.token = crypto.randomBytes(20).toString('hex')
-    const expirationDate = new Date()
-    expirationDate.setHours(expirationDate.getHours() + 1)
-    user.tokenExpiration = expirationDate
+  _createUserTokenDTO () {
+    return {
+      token: crypto.randomBytes(20).toString('hex'),
+      tokenExpiration: (new Date()).setHours((new Date()).getHours() + 1)
+    }
   }
 
   async _register (newUser, userType) {
     newUser.userType = userType
-    this._updateUserToken(newUser)
+    newUser = { ...newUser, ...this._createUserTokenDTO() }
     const registeredUser = await this.userRepository.create(newUser)
     processFileUris(registeredUser, ['avatar'])
     return registeredUser
@@ -56,9 +56,7 @@ class UserService {
     if (!passwordValid) {
       throw new Error('Invalid email or password')
     }
-
-    this._updateUserToken(user)
-    const updatedUser = await this.userRepository.update(user.id, user)
+    const updatedUser = await this.userRepository.updateToken(user.id, this._createUserTokenDTO())
     processFileUris(updatedUser, ['avatar'])
     return updatedUser
   }

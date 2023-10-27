@@ -5,7 +5,7 @@ import { OrderSequelize, RestaurantSequelize, RestaurantCategorySequelize, Produ
 
 class ProductRepository extends RepositoryBase {
   async findById (id, ...args) {
-    const product = await ProductSequelize.findByPk(id, {
+    return ProductSequelize.findByPk(id, {
       include: [
         {
           model: ProductCategorySequelize,
@@ -13,32 +13,28 @@ class ProductRepository extends RepositoryBase {
         }]
     }
     )
-    return product?.toBussinessEntity()
   }
 
   async indexRestaurant (restaurantId) {
-    const products = await ProductSequelize.findAll({
+    return ProductSequelize.findAll({
       where: {
         restaurantId
       }
     })
-    return products.map(product => product.toBussinessEntity())
   }
 
   async show (id) {
-    return await this.findById(id)
+    return this.findById(id)
   }
 
-  async create (businessEntity, ...args) {
-    const entity = new ProductSequelize(businessEntity)
-    return (await entity.save()).toBussinessEntity()
+  async create (productData, ...args) {
+    return (new ProductSequelize(productData)).save()
   }
 
-  async update (id, businessEntity, ...args) {
+  async update (id, dataToUpdate, ...args) {
     const entity = await ProductSequelize.findByPk(id)
-    entity.set(businessEntity)
-    await entity.save()
-    return entity.toBussinessEntity()
+    entity.set(dataToUpdate)
+    return entity.save()
   }
 
   async destroy (id, ...args) {
@@ -47,7 +43,7 @@ class ProductRepository extends RepositoryBase {
   }
 
   async save (businessEntity, ...args) {
-    return await this.create(businessEntity)
+    return this.create(businessEntity)
   }
 
   async popular () {

@@ -28,16 +28,17 @@ class OrderService {
   }
 
   async getProductsFromProductLines (productLines, restaurantId) {
-    const productLinesIds = productLines.map(productLine => productLine.productId)
+    const productLinesIds = productLines.map(productLine => productLine.productId.toString())
     const restaurantWithProducts = await this.restaurantRepository.findById(restaurantId)
     const products = restaurantWithProducts.products
-    const productsFromProductLines = products.filter(product => productLinesIds.includes(product.id))
-    return this.#equalProductsArraysSorting(productsFromProductLines, productLines)
+    const productsFromProductLines = products.filter(product => productLinesIds.includes(product.id.toString()))
+    const aver = this.#equalProductsArraysSorting(productsFromProductLines, productLines)
+    return aver
   }
 
   #equalProductsArraysSorting (productsToBeSorted, sortedProductsArray) {
     return sortedProductsArray.map(obj2 => {
-      const index = productsToBeSorted.findIndex(obj1 => obj1.id === obj2.productId)
+      const index = productsToBeSorted.findIndex(obj1 => obj1.id.toString() === obj2.productId.toString())
       return productsToBeSorted[index]
     })
   }
@@ -46,7 +47,7 @@ class OrderService {
     const products = await this.getProductsFromProductLines(productLines, restaurantId)
     const productLinesCopy = [...productLines]
     /* eslint-disable eqeqeq */
-    productLinesCopy.forEach(pl => { pl.unityPrice = products.find(p => p.id === pl.productId).price })
+    productLinesCopy.forEach(pl => { pl.unityPrice = products.find(p => p.id.toString() === pl.productId.toString()).price })
     return productLinesCopy
   }
 
@@ -65,7 +66,7 @@ class OrderService {
 
   #getProductsWithOrderedProducts (products, productLines) {
     for (const product of products) {
-      const productLine = productLines.find(productLine => productLine.productId === product.id)
+      const productLine = productLines.find(productLine => productLine.productId.toString() === product.id.toString())
       product.quantity = productLine.quantity
       product.unityPrice = productLine.unityPrice
     }
@@ -184,13 +185,13 @@ class OrderService {
   async productsBelongToSameRestaurantAsSavedOrder (productLines, orderId) {
     const order = await this.findById(orderId)
     const products = await this.getProductsFromProductLines(productLines, order.restaurantId)
-    return products.find(product => product.restaurantId === order.restaurantId)
+    return products.find(product => product.restaurantId.toString() === order.restaurantId.toString())
   }
 
   async productsBelongToSameRestaurant (order, productLines, orderId) {
     const restaurantId = await this.getRestaurantIdOfOrder(order, orderId)
     const products = await this.getProductsFromProductLines(productLines, restaurantId)
-    return !(products.length === 0 || products.length !== productLines.length || products.find(product => product.restaurantId !== restaurantId))
+    return !(products.length === 0 || products.length !== productLines.length || products.find(product => product.restaurantId.toString() !== restaurantId.toString()))
   }
 
   async areProductsAvailable (order, productLines, orderId) {

@@ -1,8 +1,5 @@
-
 import moment from 'moment'
 import { Model } from 'sequelize'
-import Restaurant from '../../../entities/Restaurant.js'
-
 const loadModel = function (sequelize, DataTypes) {
   class RestaurantSequelize extends Model {
     /**
@@ -26,15 +23,6 @@ const loadModel = function (sequelize, DataTypes) {
       } catch (err) {
         return err
       }
-    }
-
-    toBussinessEntity () {
-      const products = this.products ? this.products.map(product => product.toBussinessEntity()) : null
-
-      return new Restaurant(this.id, this.createdAt, this.updatedAt,
-        this.name, this.description, this.address, this.postalCode, this.url, this.shippingCosts,
-        this.averageServiceMinutes, this.email, this.phone, this.logo, this.heroImage,
-        this.status, this.restaurantCategoryId, this.restaurantCategory?.name, this.userId, products)
     }
   }
   RestaurantSequelize.init({

@@ -1,7 +1,5 @@
-
 import { Model } from 'sequelize'
 import bcrypt from 'bcryptjs'
-import User from '../../../entities/User.js'
 
 const salt = bcrypt.genSaltSync(5)
 
@@ -16,10 +14,6 @@ const loadModel = function (sequelize, DataTypes) {
       // define association here
       UserSequelize.hasMany(models.RestaurantSequelize, { foreignKey: 'userId' })
       UserSequelize.hasMany(models.OrderSequelize, { foreignKey: 'userId' })
-    }
-
-    toBussinessEntity () {
-      return new User(this.id, this.createdAt, this.updatedAt, this.firstName, this.lastName, this.email, this.password, this.token, this.tokenExpiration, this.phone, this.avatar, this.address, this.postalCode, this.userType)
     }
   }
   UserSequelize.init({

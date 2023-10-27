@@ -4,7 +4,7 @@ import { RestaurantSequelize, RestaurantCategorySequelize, ProductSequelize, Pro
 
 class RestaurantRepository extends RepositoryBase {
   async findById (id, ...args) {
-    const restaurant = await RestaurantSequelize.findByPk(id, {
+    return RestaurantSequelize.findByPk(id, {
       // attributes: { exclude: ['userId'] },
       include: [{
         model: ProductSequelize,
@@ -17,11 +17,10 @@ class RestaurantRepository extends RepositoryBase {
       }],
       order: [[{ model: ProductSequelize, as: 'products' }, 'order', 'ASC']]
     })
-    return restaurant?.toBussinessEntity()
   }
 
   async findAll (...args) {
-    const restaurants = await RestaurantSequelize.findAll(
+    return RestaurantSequelize.findAll(
       {
         attributes: ['id', 'name', 'description', 'address', 'postalCode', 'url', 'shippingCosts', 'averageServiceMinutes', 'email', 'phone', 'logo', 'heroImage', 'status', 'restaurantCategoryId'],
         include:
@@ -32,19 +31,16 @@ class RestaurantRepository extends RepositoryBase {
         order: [[{ model: RestaurantCategorySequelize, as: 'restaurantCategory' }, 'name', 'ASC']]
       }
     )
-    return arrayToBussinessEntity(restaurants)
   }
 
-  async create (businessEntity, ...args) {
-    const entity = new RestaurantSequelize(businessEntity)
-    return (await entity.save()).toBussinessEntity()
+  async create (restaurantData, ...args) {
+    return (new RestaurantSequelize(restaurantData)).save()
   }
 
-  async update (id, businessEntity, ...args) {
+  async update (id, dataToUpdate, ...args) {
     const entity = await RestaurantSequelize.findByPk(id)
-    entity.set(businessEntity)
-    await entity.save()
-    return entity.toBussinessEntity()
+    entity.set(dataToUpdate)
+    return entity.save()
   }
 
   async destroy (id, ...args) {
@@ -53,11 +49,11 @@ class RestaurantRepository extends RepositoryBase {
   }
 
   async save (businessEntity, ...args) {
-    return await this.create(businessEntity)
+    return this.create(businessEntity)
   }
 
   async findByOwnerId (ownerId) {
-    const restaurants = await RestaurantSequelize.findAll(
+    return RestaurantSequelize.findAll(
       {
         attributes: { exclude: ['userId'] },
         where: { userId: ownerId },
@@ -66,7 +62,6 @@ class RestaurantRepository extends RepositoryBase {
           as: 'restaurantCategory'
         }]
       })
-    return arrayToBussinessEntity(restaurants)
   }
 
   async updateAverageServiceTime (restaurantId) {
@@ -76,11 +71,8 @@ class RestaurantRepository extends RepositoryBase {
   }
 
   async show (id) {
-    return await this.findById(id)
+    return this.findById(id)
   }
 }
 
 export default RestaurantRepository
-function arrayToBussinessEntity (restaurants) {
-  return restaurants.map(restaurant => restaurant.toBussinessEntity())
-}

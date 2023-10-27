@@ -1,7 +1,4 @@
-
 import { Model } from 'sequelize'
-import Order from '../../../entities/Order.js'
-
 const loadModel = (sequelize, DataTypes) => {
   class OrderSequelize extends Model {
     /**
@@ -20,14 +17,32 @@ const loadModel = (sequelize, DataTypes) => {
       OrderSequelize.belongsToMany(models.ProductSequelize, { as: 'products', through: OrderProducts }, { onDelete: 'cascade' })
     }
 
-    static createOrderProduct (id, createdAt, updatedAt, name, image, quantity, unityPrice) {
-      return { id, createdAt, updatedAt, name, image, quantity, unityPrice }
+    toJSON () {
+      const attributes = Object.assign({}, this.get())
+      if (this.dataValues.products) {
+        attributes.products = this.dataValues.products.map(product => {
+          const jsonProduct = product.toJSON()
+          jsonProduct.quantity = product.quantity
+          jsonProduct.unityPrice = product.unityPrice
+          return jsonProduct
+        })
+      }
+      for (const key in attributes) {
+        if (attributes[key] === null) {
+          attributes[key] = undefined
+        }
+      }
+      return attributes
     }
 
-    toBussinessEntity () {
-      const orderedProducts = this.products?.map(product => OrderSequelize.createOrderProduct(product.id, product.createdAt, product.updatedAt, product.name, product.image, product.OrderProducts.quantity, product.OrderProducts.unityPrice))
-      return new Order(this.id.toString(), this.createdAt ? this.createdAt : undefined, this.updatedAt ? this.updatedAt : undefined, this.startedAt ? this.startedAt : undefined, this.sentAt ? this.sentAt : undefined, this.deliveredAt ? this.deliveredAt : undefined, this.status, this.price, this.address, this.shippingCosts, this.restaurantId.toString(), this.userId.toString(), orderedProducts)
-    }
+    /* static createOrderProduct (id, createdAt, updatedAt, name, image, quantity, unityPrice) {
+     return { id, createdAt, updatedAt, name, image, quantity, unityPrice }
+   }
+
+   /*bussinessEntity () {
+     const orderedProducts = this.products?.map(product => OrderSequelize.createOrderProduct(product.id, product.createdAt, product.updatedAt, product.name, product.image, product.OrderProducts.quantity, product.OrderProducts.unityPrice))
+     return new Order(this.id.toString(), this.createdAt ? this.createdAt : undefined, this.updatedAt ? this.updatedAt : undefined, this.startedAt ? this.startedAt : undefined, this.sentAt ? this.sentAt : undefined, this.deliveredAt ? this.deliveredAt : undefined, this.status, this.price, this.address, this.shippingCosts, this.restaurantId.toString(), this.userId.toString(), orderedProducts)
+   } */
 
     getStatus () {
       if (this.deliveredAt) { return 'delivered' }
@@ -56,7 +71,33 @@ const loadModel = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Order'
   })
+  OrderSequelize.addHook('afterFind', flattenOrderProducts)
+  OrderSequelize.addHook('afterCreate', flattenOrderProducts)
+  OrderSequelize.addHook('afterUpdate', flattenOrderProducts)
+
   return OrderSequelize
 }
 
 export default loadModel
+
+const flattenOrderProducts = orders => {
+  if (Array.isArray(orders)) {
+    orders.forEach(order => {
+      if (order.products) {
+        order.products.forEach(product => {
+          if (product.OrderProducts) {
+            Object.assign(product, product.OrderProducts.get())
+            delete product.OrderProducts
+          }
+        })
+      }
+    })
+  } else if (orders && orders.products) {
+    orders.products.forEach(product => {
+      if (product.OrderProducts) {
+        Object.assign(product, product.OrderProducts.get())
+        delete product.OrderProducts
+      }
+    })
+  }
+}

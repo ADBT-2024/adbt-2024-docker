@@ -5,19 +5,22 @@ import { OrderSequelize, RestaurantSequelize, ProductSequelize, sequelizeSession
 
 class OrderRepository extends RepositoryBase {
   async findById (id, ...args) {
-    const entity = await OrderSequelize.findByPk(id)
-    return entity?.toBussinessEntity()
+    return OrderSequelize.findByPk(id, {
+      include: {
+        model: ProductSequelize,
+        as: 'products'
+      }
+    })
   }
 
   async findByRestaurantId (restaurantId) {
-    const orders = await OrderSequelize.findAll({
+    return OrderSequelize.findAll({
       where: { restaurantId },
       include: {
         model: ProductSequelize,
         as: 'products'
       }
     })
-    return orders.map(order => order.toBussinessEntity())
   }
 
   async indexCustomer (customerId, page = 1, limit = 10) {
@@ -41,7 +44,7 @@ class OrderRepository extends RepositoryBase {
     })
     const total = await OrderSequelize.count({ where: { userId: customerId } })
     return {
-      items: orders.map(order => order.toBussinessEntity()),
+      items: orders,
       pagination: {
         total,
         page,
@@ -59,19 +62,31 @@ class OrderRepository extends RepositoryBase {
   }
 
   async #saveOrderWithProducts (order, productLines, transaction) {
-    let savedOrder = await order.save({ transaction })
+    const savedOrder = await order.save({ transaction })
     await this.#saveOrderProducts(savedOrder, productLines, transaction)
-    savedOrder = await savedOrder.reload({ include: { model: ProductSequelize, as: 'products' }, transaction })
-    return savedOrder
+    const reloaded = await savedOrder.reload({ include: { model: ProductSequelize, as: 'products' }, transaction })
+    return reloaded
+  }
+
+  formatOrderProducts (orderData) {
+    return orderData.products.map(orderDataProductDTO => {
+      return {
+        name: orderDataProductDTO.name,
+        image: orderDataProductDTO.image,
+        quantity: orderDataProductDTO.quantity,
+        unityPrice: orderDataProductDTO.unityPrice,
+        id: orderDataProductDTO.id
+      }
+    })
   }
 
   async create (orderData, ...args) {
     let newOrder = OrderSequelize.build(orderData)
     const transaction = await sequelizeSession.transaction()
     try {
-      newOrder = await this.#saveOrderWithProducts(newOrder, orderData.products, transaction)
+      newOrder = await this.#saveOrderWithProducts(newOrder, this.formatOrderProducts(orderData), transaction)
       await transaction.commit()
-      return newOrder.toBussinessEntity()
+      return this.findById(newOrder.id)
     } catch (err) {
       await transaction.rollback()
       throw new Error(err)
@@ -84,9 +99,9 @@ class OrderRepository extends RepositoryBase {
       await OrderSequelize.update(orderData, { where: { id } }, { transaction })
       let updatedOrder = await OrderSequelize.findByPk(id)
       await updatedOrder.setProducts([], { transaction })
-      updatedOrder = await this.#saveOrderWithProducts(updatedOrder, orderData.products, transaction)
+      updatedOrder = await this.#saveOrderWithProducts(updatedOrder, this.formatOrderProducts(orderData), transaction)
       await transaction.commit()
-      return updatedOrder.toBussinessEntity()
+      return this.findById(updatedOrder.id)
     } catch (err) {
       await transaction.rollback()
       throw new Error(err)
@@ -98,13 +113,9 @@ class OrderRepository extends RepositoryBase {
     return result === 1
   }
 
-  async save (businessEntity, ...args) {
-    const savedOrder = await OrderSequelize.findByPk(businessEntity.id)
-    if (savedOrder) {
-      savedOrder.set(businessEntity)
-      return await savedOrder.save()
-    }
-    return await this.create(businessEntity)
+  async save (orderSequelize, ...args) {
+    await orderSequelize.save()
+    return this.findById()
   }
 
   async analytics (restaurantId) {

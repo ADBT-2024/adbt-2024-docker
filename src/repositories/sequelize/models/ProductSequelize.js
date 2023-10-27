@@ -1,6 +1,4 @@
-
 import { Model } from 'sequelize'
-import Product from '../../../entities/Product.js'
 const loadModel = function (sequelize, DataTypes) {
   class ProductSequelize extends Model {
     /**
@@ -14,16 +12,9 @@ const loadModel = function (sequelize, DataTypes) {
         quantity: DataTypes.INTEGER,
         unityPrice: DataTypes.DOUBLE
       })
-
       ProductSequelize.belongsTo(models.RestaurantSequelize, { foreignKey: 'restaurantId', as: 'restaurant', onDelete: 'cascade' })
       ProductSequelize.belongsTo(models.ProductCategorySequelize, { foreignKey: 'productCategoryId', as: 'productCategory' })
       ProductSequelize.belongsToMany(models.OrderSequelize, { as: 'orders', through: OrderProducts })
-    }
-
-    toBussinessEntity () {
-      return new Product(this.id.toString(), this.createdAt, this.updatedAt,
-        this.name, this.description, this.price, this.image, this.order, this.availability,
-        this.restaurantId.toString(), this.productCategoryId.toString(), this.productCategory?.name)
     }
   }
   ProductSequelize.init({

@@ -1,7 +1,4 @@
-
 import { Model } from 'sequelize'
-import RestaurantCategory from '../../../entities/RestaurantCategory.js'
-
 const loadModel = function (sequelize, DataTypes) {
   class RestaurantCategorySequelize extends Model {
     /**
@@ -12,10 +9,6 @@ const loadModel = function (sequelize, DataTypes) {
     static associate (models) {
       // define association here
       RestaurantCategorySequelize.hasMany(models.RestaurantSequelize, { foreignKey: 'restaurantCategoryId' })
-    }
-
-    toBussinessEntity () {
-      return new RestaurantCategory(this.id, this.createdAt, this.updatedAt, this.name)
     }
   }
   RestaurantCategorySequelize.init({

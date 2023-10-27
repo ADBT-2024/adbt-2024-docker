@@ -1,7 +1,4 @@
-
 import { Model } from 'sequelize'
-import ProductCategory from '../../../entities/ProductCategory.js'
-
 const loadModel = function (sequelize, DataTypes) {
   class ProductCategorySequelize extends Model {
     /**
@@ -12,10 +9,6 @@ const loadModel = function (sequelize, DataTypes) {
     static associate (models) {
       // define association here
       ProductCategorySequelize.hasMany(models.ProductSequelize)
-    }
-
-    toBussinessEntity () {
-      return new ProductCategory(this.id, this.createdAt, this.updatedAt, this.name)
     }
   }
   ProductCategorySequelize.init({

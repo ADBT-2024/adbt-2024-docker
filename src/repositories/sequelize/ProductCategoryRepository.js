@@ -4,12 +4,8 @@ import { ProductCategorySequelize } from './models/models.js'
 
 class ProductCategoryRepository extends RepositoryBase {
   async findAll (...args) {
-    const restaurantCategories = await ProductCategorySequelize.findAll()
-    return arrayToBussinessEntity(restaurantCategories)
+    return ProductCategorySequelize.findAll()
   }
 }
 
 export default ProductCategoryRepository
-function arrayToBussinessEntity (entityArray) {
-  return entityArray.map(entity => entity.toBussinessEntity())
-}

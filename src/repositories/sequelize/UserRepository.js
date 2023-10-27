@@ -3,21 +3,30 @@ import { UserSequelize } from './models/models.js'
 
 class UserRepository extends RepositoryBase {
   async findById (id, ...args) {
-    const entity = await UserSequelize.findByPk(id)
-    return entity?.toBussinessEntity()
+    return UserSequelize.findByPk(id)
   }
 
   async create (businessEntity, ...args) {
-    const entity = new UserSequelize(businessEntity)
-    return (await entity.save()).toBussinessEntity()
+    return (new UserSequelize(businessEntity)).save()
   }
 
-  async update (id, businessEntity, ...args) {
-    const entity = await UserSequelize.findByPk(id)
-    delete businessEntity.password // don't hash the already hashed password. This version does not include functionality to update password
-    entity.set(businessEntity)
-    await entity.save()
-    return entity.toBussinessEntity()
+  async update (id, valuesToUpdate, ...args) {
+    await UserSequelize.update(valuesToUpdate, {
+      where: {
+        id: id
+      }
+    })
+    return UserSequelize.findByPk(id, {
+      attributes: { exclude: ['password'] }
+    })
+  }
+
+  async updateToken (id, tokenDTO, ...args) {
+    const entity = await UserSequelize.findByPk(id, {
+      attributes: { exclude: ['password'] }
+    })
+    entity.set(tokenDTO)
+    return entity.save()
   }
 
   async destroy (id, ...args) {
@@ -26,26 +35,23 @@ class UserRepository extends RepositoryBase {
   }
 
   async findByToken (token) {
-    const entity = await UserSequelize.findOne({ where: { token } }, { attributes: { exclude: ['password'] } })
-    return entity?.toBussinessEntity()
+    return UserSequelize.findOne({ where: { token } }, { attributes: { exclude: ['password'] } })
   }
 
   async findOwnerByEmail (email) {
-    const entity = await this._findByEmailAndUserType(email, 'owner')
-    return entity?.toBussinessEntity()
+    return this._findByEmailAndUserType(email, 'owner')
   }
 
   async findCustomerByEmail (email) {
-    const entity = await this._findByEmailAndUserType(email, 'customer')
-    return entity?.toBussinessEntity()
+    return this._findByEmailAndUserType(email, 'customer')
   }
 
   async _findByEmailAndUserType (email, userType) {
-    return await UserSequelize.findOne({ where: { email, userType } })
+    return UserSequelize.findOne({ where: { email, userType } })
   }
 
   async save (businessEntity, ...args) {
-    return await this.create(businessEntity)
+    return this.create(businessEntity)
   }
 }
 
