@@ -1,0 +1,86 @@
+version: '3'
+services:
+    mongodb:
+      image: mongo:7.0.2
+      ports:
+        - "27017:27017"
+      environment:
+        - MONGO_INITDB_ROOT_USERNAME
+        - MONGO_INITDB_ROOT_PASSWORD
+        - MONGO_INITDB_DATABASE
+        - DATABASE_USERNAME
+        - DATABASE_PASSWORD
+      volumes:
+        - 'krakoweats-mongodb:/data/db'
+        - './init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh'
+      networks:
+        - krakoweats
+
+    mariadb:
+        image: mariadb:11.1
+        ports:
+            - '${FORWARD_DB_PORT:-3306}:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: '${MONGO_INITDB_ROOT_PASSWORD}'
+            MYSQL_ROOT_HOST: '%'
+            MYSQL_DATABASE: '${MONGO_INITDB_DATABASE}'
+            MYSQL_USER: '${DATABASE_USERNAME}'
+            MYSQL_PASSWORD: '${DATABASE_PASSWORD}'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        volumes:
+            - 'krakoweats-mysql:/var/lib/mysql'
+        networks:
+            - krakoweats
+        healthcheck:
+            test:
+                - CMD
+                - mysqladmin
+                - ping
+                - '-p${DATABASE_PASSWORD}'
+            retries: 3
+            timeout: 5s
+#    backend:
+#      build:
+#        context: ./
+#        target: dev
+#      volumes:
+#        - .:/src
+#        - ./node_modules:/src/node_modules
+#      command: >
+#        sh -c "pwd && ls -la && npm run start:sequelize:docker_debug"
+#      ports:
+#        - "3000:3000"
+#        - "9229:9229"
+#      depends_on:
+#        - mariadb
+##        - mongodb
+#      environment:
+#        NODE_ENV: development
+#        DEBUG: krakow-eats:*
+#        WAIT_HOSTS: mariadb:3306
+#        WAIT_HOSTS_TIMEOUT: 300
+#        WAIT_SLEEP_INTERVAL: 3
+#        WAIT_HOST_CONNECT_TIMEOUT: 5
+#      env_file:
+#        - .env.sequelize.docker
+#      networks:
+#        - krakoweats
+#    mongo-express:
+#      image: mongo-express
+#      restart: always
+#      ports:
+#        - "8087:8087"
+#      environment:
+#        ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+#        ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+#        ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/
+#      networks:
+#        - krakoweats
+networks:
+  krakoweats:
+        driver: bridge
+volumes:
+  krakoweats-mongodb:
+    driver: local
+  krakoweats-mysql:
+    driver: local
