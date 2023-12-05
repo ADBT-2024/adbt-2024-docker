@@ -2,7 +2,6 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const env = process.env.NODE_ENV || 'development'
-
 const configEnvironments = {
   development: {
     username: process.env.DATABASE_USERNAME,
@@ -41,7 +40,7 @@ const configEnvironments = {
 }
 
 const getEnvironmentConfig = function () {
-  return configEnvironments[env]
+  return configEnvironments[env.trim()]
 }
 
 export default getEnvironmentConfig
