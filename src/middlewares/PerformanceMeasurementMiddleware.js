@@ -5,18 +5,21 @@ const saveToCSV = (csvFilePath, method, endpoint, duration) => {
   const row = `${method},${endpoint},${duration}\n`
   fs.appendFile(csvFilePath, row, 'utf8', function (err) {
     if (err) {
+      console.log(err)
       console.log('Some error occured - file either not saved or corrupted file saved.')
     }
   })
 }
 const initializeCSVFile = () => {
-  const performanceMeasurementsDirName = './performanceMeasurements/logs'
+  const performanceMeasurementsDirName = './performanceMeasurements/logs';
   if (!fs.existsSync(performanceMeasurementsDirName)) {
-    fs.mkdirSync(performanceMeasurementsDirName, { recursive: true })
+    fs.mkdirSync(performanceMeasurementsDirName, { recursive: true });
   }
-  const csvFilePath = path.resolve(performanceMeasurementsDirName, `${process.env.DATABASE_TECHNOLOGY}-${process.env.DATABASE_PROTOCOL}-${new Date()}.csv`)
-  saveToCSV(csvFilePath, 'method', 'endpoint', 'duration(ms)')
-  return csvFilePath
+  const formattedDate = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').split('.')[0];
+
+  const csvFilePath = path.resolve(performanceMeasurementsDirName, `${process.env.DATABASE_TECHNOLOGY}-${process.env.DATABASE_PROTOCOL}-${formattedDate}.csv`);
+  saveToCSV(csvFilePath, 'method', 'endpoint', 'duration(ms)');
+  return csvFilePath;
 }
 
 const getDurationInMilliseconds = (start) => {

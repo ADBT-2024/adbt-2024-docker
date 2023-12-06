@@ -31,7 +31,7 @@
     "test:sequelize": "echo ==========Testing sequelize========== && copy .env.sequelize .env && npm install && SET NODE_ENV=production && start /b node ./src/backend.js && timeout /t 5 && echo Running tc collection && tc --col KrakowEatsTestsForBigSeeder --report csv,html --stop-on-fail && echo Killing node server && curl -X POST http://localhost:3000/shutdown && timeout /t 2",
     "test:mongo-local": "echo ==========Testing mongo-local========== && copy .env.mongo.local .env && npm install && SET NODE_ENV=production && start /b node ./src/backend.js && timeout /t 5 && echo Running tc collection && tc --col KrakowEatsTestsForBigSeeder --report csv,html --stop-on-fail && echo Killing node server && curl -X POST http://localhost:3000/shutdown && timeout /t 2",
     "test:mongo-atlas": "echo ==========Testing mongo-atlas========== && copy .env.mongo.atlas .env && npm install && SET NODE_ENV=production && start /b node ./src/backend.js && timeout /t 5 && echo Running tc collection && tc --col KrakowEatsTestsForBigSeeder --report csv,html --stop-on-fail && echo Killing node server && curl -X POST http://localhost:3000/shutdown && timeout /t 2",
-    "test:computePerformance": ".\\performanceMeasurements\\computePerformance.sh",
+    "test:computePerformance": "powershell -ExecutionPolicy Bypass -File .\\performanceMeasurements\\computePerformance.ps1",
     "test:all:refresh": "rmdir /s /q performanceMeasurements\\logs 2>nul & del performanceMeasurements\\aggregatedPerformance.txt 2>nul & npm run seed:sequelize:big & npm run test:sequelize & npm run seed:mongo-local:big & npm run test:mongo-local & npm run seed:mongo-atlas:big & npm run test:mongo-atlas & npm run test:computePerformance",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
   },
